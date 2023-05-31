@@ -1,5 +1,5 @@
 //import { ReactComponent as ReactOfficePlan } from '../../assets/office-plan.svg'
-import { DeskBookingState } from '../../shared/models/rest/desk-booking-state';
+import { DeskBookingState } from '../../shared/models/ihm/rest/desk-booking-state';
 import { FunctionComponent, useEffect, useState, } from 'react';
 import './OfficePlan.css';
 

@@ -3,7 +3,7 @@ import { ErrorHandlerService } from '../../shared/services/ihm/error-handler.ser
 import { DatePickerFomat } from '../../shared/constants/date.constant';
 import { LOCALE } from '../../shared/constants/locale.constant';
 import { HEURE } from '../../shared/constants/label.constant';
-import { Field } from '../../shared/models/form.model';
+import { Field } from '../../shared/models/ihm/form.model';
 import { OfficePlan } from '../OfficePlan/OfficePlan';
 import { FunctionComponent, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
