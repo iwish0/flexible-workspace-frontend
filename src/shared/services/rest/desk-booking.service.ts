@@ -1,4 +1,4 @@
-import { DeskBookingState } from '../../models/rest/desk-booking-state';
+import { DeskBookingState } from 'models/desk-booking-state';
 import { DeskBookingsUrl } from '../../constants/url.constant';
 import axios, { AxiosResponse } from 'axios';
 

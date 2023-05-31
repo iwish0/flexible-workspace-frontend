@@ -1,15 +1,15 @@
 import { DeskBookingService, SearchDeskCriteria } from '../../shared/services/rest/desk-booking.service';
+import { ErrorHandlerService } from '../../shared/services/ihm/error-handler.service';
 import { DatePickerFomat } from '../../shared/constants/date.constant';
 import { LOCALE } from '../../shared/constants/locale.constant';
 import { HEURE } from '../../shared/constants/label.constant';
-import { Field } from '../../shared/models/ihm/form.model';
+import { Field } from '../../shared/models/form.model';
+import { OfficePlan } from '../OfficePlan/OfficePlan';
 import { FunctionComponent, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
-import { OfficePlan } from '../OfficePlan/OfficePlan';
 import './DeskBookingForm.css';
-import { ErrorHandlerService } from '../../shared/services/ihm/error-handler.service';
-import { DeskBookingState } from '../../shared/models/rest/desk-booking-state';
+import { DeskBookingState } from 'models/desk-booking-state';
 
 type Form = {
     checkInDateTime: Field<Date>;
@@ -21,6 +21,7 @@ export const DeskBookingForm: FunctionComponent = () => {
         checkInDateTime: { value: new Date(), isValid: true },
         checkOutDateTime: { value: new Date(), isValid: true }
     });
+    const [listDeskBookingState, setListDeskBookingState] = useState<DeskBookingState[]>([])
 
     const onChangeCheckInDate = (date: Date): void => {
         setForm((form) => { return { ...form, checkInDateTime: { value: date, isValid: true } } });
@@ -38,6 +39,7 @@ export const DeskBookingForm: FunctionComponent = () => {
                 checkOutDateTime: form.checkOutDateTime.value
             };
             const result: DeskBookingState[] = await DeskBookingService.getListDeskBookingState(criteria);
+            setListDeskBookingState(result);
             console.log(result);
         } catch (error: any) {
             ErrorHandlerService.handleError(error);
@@ -76,8 +78,7 @@ export const DeskBookingForm: FunctionComponent = () => {
                 </div>
                 <button type="submit">Rechercher</button>
             </form>
-
-            <OfficePlan />
+            <OfficePlan listDeskBookingState={listDeskBookingState} />
         </div>
     )
 }

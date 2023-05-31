@@ -6,6 +6,10 @@ fill:cadetblue
     fill:fuchsia
 }
 
+.rect{
+  fill:lightgray;
+  stroke: lightskyblue;
+}
 rect.item:hover {
     fill: black !important;
     stroke: yellow;
@@ -14,10 +18,10 @@ rect.item:hover {
   }
 
   .green{
-    fill:green
+    fill:green !important
   }
 
   
   .red{
-    fill:red
+    fill:red !important
   }
