@@ -1,13 +1,15 @@
-import { DeskBookingService, SearchDeskCriteria } from '../../shared/services/desk-booking.service';
+import { DeskBookingService, SearchDeskCriteria } from '../../shared/services/rest/desk-booking.service';
 import { DatePickerFomat } from '../../shared/constants/date.constant';
 import { LOCALE } from '../../shared/constants/locale.constant';
 import { HEURE } from '../../shared/constants/label.constant';
-import { Field } from '../../shared/models/form.model';
+import { Field } from '../../shared/models/ihm/form.model';
 import { FunctionComponent, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import { OfficePlan } from '../OfficePlan/OfficePlan';
 import './DeskBookingForm.css';
+import { ErrorHandlerService } from '../../shared/services/ihm/error-handler.service';
+import { DeskBookingState } from '../../shared/models/rest/desk-booking-state';
 
 type Form = {
     checkInDateTime: Field<Date>;
@@ -28,13 +30,19 @@ export const DeskBookingForm: FunctionComponent = () => {
         setForm((form) => { return { ...form, checkOutDateTime: { value: date, isValid: true } } });
     }
 
-    const handleSubmit = (e: any): void => {
-        e.preventDefault();
-        const criteria: SearchDeskCriteria = {
-            checkInDateTime: form.checkInDateTime.value,
-            checkOutDateTime: form.checkOutDateTime.value
-        };
-        DeskBookingService.getListDeskBookingState(criteria)
+    async function handleSubmit(e: any) {
+        try {
+            e.preventDefault();
+            const criteria: SearchDeskCriteria = {
+                checkInDateTime: form.checkInDateTime.value,
+                checkOutDateTime: form.checkOutDateTime.value
+            };
+            const result: DeskBookingState[] = await DeskBookingService.getListDeskBookingState(criteria);
+            console.log(result);
+        } catch (error: any) {
+            ErrorHandlerService.handleError(error);
+        }
+
     }
 
     return (
