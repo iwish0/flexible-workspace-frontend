@@ -1,21 +1,17 @@
 import axios from 'axios';
+import { DeskBookingsUrl } from '../constants/url.constant';
 
 export type SearchDeskCriteria = {
-    checkInDate: Date;
-    checkOutDate: Date;
+    checkInDateTime: Date;
+    checkOutDateTime: Date;
 }
 
 export class DeskBookingService {
-
-    public static async searchAvailableDesk(criteria: SearchDeskCriteria) {
+    public static async getListDeskBookingState(criteria: SearchDeskCriteria) {
         try {
-            const result = axios.post(`${process.env.REACT_APP_API_URL}/criteria`, criteria);
-            console.log(result);
-            return result
-            //  (`${process.env.REACT_APP_API_URL}/criteria`,{method:'POST'})
+            return await axios.post(`${process.env.REACT_APP_API_URL}${DeskBookingsUrl.STATE}`, criteria);
         } catch (e) {
             console.log(e);
         }
     }
-
 }
