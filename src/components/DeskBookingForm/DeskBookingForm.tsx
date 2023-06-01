@@ -1,5 +1,5 @@
 import { DeskBookingService, SearchDeskCriteria } from '../../shared/services/rest/desk-booking.service';
-import { OfficeLayoutSVGData } from '../../shared/models/ihm/rest/office-layout.model';
+import { OfficeLayoutSVGData } from '../../shared/models/rest/office-layout.model';
 import { ErrorHandlerService } from '../../shared/services/ihm/error-handler.service';
 import { DatePickerFomat } from '../../shared/constants/date.constant';
 import { LOCALE } from '../../shared/constants/locale.constant';

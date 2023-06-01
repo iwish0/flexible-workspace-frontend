@@ -1,4 +1,4 @@
-import { Desk } from 'models/desk-booking-state';
+import { Desk } from './desk.model';
 import { User } from './user.model';
 
 export type DeskBooking = {
@@ -11,7 +11,13 @@ export type DeskBooking = {
 }
 
 export type DeskBookingState = {
+    searchCriteria: SearchCriteria;
     deskInfo: Desk;
     bookingInfo: DeskBooking;
     isBooked: boolean;
 }
+
+export type SearchCriteria = {
+    checkInDateTime: string;
+    checkOutDateTime: string;
+};
