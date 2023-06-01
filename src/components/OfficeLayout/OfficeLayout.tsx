@@ -1,101 +1,16 @@
-//import { ReactComponent as ReactOfficePlan } from '../../assets/office-plan.svg'
-import { DeskBookingState } from '../../shared/models/ihm/rest/desk-booking-state';
-import { FunctionComponent, useEffect, useState, } from 'react';
-import './OfficePlan.css';
+import { OfficeLayoutSVGData } from '../../shared/models/ihm/rest/office-layout.model';
+import { FunctionComponent } from 'react';
+import './OfficeLayout.css';
 
 type Props = {
-    listDeskBookingState: DeskBookingState[]
+    listOfficeLayoutSVGData: OfficeLayoutSVGData[]
 };
-
-type SvgRectAttribut = {
-    id: IdSeat;
-    height: string;
-    width: string;
-    x: string;
-    y: string;
-}
-
-type SvgData = {
-    svgDrawAttribut: SvgRectAttribut;
-    svgBuisnessValue: DeskBookingState | undefined;
-}
-
-type IdSeat =
-    'A1' | 'A2' | 'A3' |
-    'B1' | 'B2' | 'B3';
-
-function getListSvgValue(listDeskBookingState: DeskBookingState[]): SvgData[] {
-    const a = svgRectAttributs.map((svgRectAttribut: SvgRectAttribut) => {
-        const deskBookingState = listDeskBookingState.find(({ deskInfo }) => deskInfo.name === svgRectAttribut.id);
-        return {
-            svgBuisnessValue: deskBookingState,
-            svgDrawAttribut: svgRectAttribut
-        };
-    })
-    return a;
-}
-
-
-const svgRectAttributs: SvgRectAttribut[] = [
-    {
-        id: 'A1',
-        height: '69',
-        width: '75',
-        x: '39',
-        y: '28'
-    },
-    {
-        id: 'A2',
-        height: '69',
-        width: '75',
-        x: '43',
-        y: '133'
-    },
-    {
-        id: 'A3',
-        height: '69',
-        width: '75',
-        x: '189',
-        y: '30'
-    },
-    {
-        id: 'B1',
-        height: '69',
-        width: '75',
-        x: '326',
-        y: '31'
-    },
-    {
-        id: 'B2',
-        height: '69',
-        width: '75',
-        x: '191',
-        y: '134'
-    },
-    {
-        id: 'B3',
-        height: '69',
-        width: '75',
-        x: '331',
-        y: '135'
-    }
-];
-
-
-export const OfficePlan: FunctionComponent<Props> = ({ listDeskBookingState }) => {
-    const [isAvailable, setIsAvailable] = useState<boolean>(true);
-    const [listSvgValue, setListSvgValue] = useState<SvgData[]>([])
-
-    useEffect(() => {
-        console.log('useeffect!')
-        const result = getListSvgValue(listDeskBookingState);
-        console.log('result', result);
-        setListSvgValue(result);
-    }, [listDeskBookingState])
+export const OfficeLayout: FunctionComponent<Props> = ({ listOfficeLayoutSVGData }) => {
 
     const handleClick = (e: any) => {
-        console.log(e);
-        setIsAvailable(false);
+        const result=prompt('email de confirmation');
+        console.log('result',result)
+        
     }
 
     return (
@@ -104,7 +19,7 @@ export const OfficePlan: FunctionComponent<Props> = ({ listDeskBookingState }) =
                 <g className="layer">
                     <title>Layer 1</title>
                     <rect onClick={handleClick} fill="#ffffff" height="248" id="svg_5" stroke="#000000" transform="matrix(1 0 0 1 0 0)" width="637" x="-17" y="-7" />
-                    {listSvgValue.map(({ svgBuisnessValue, svgDrawAttribut }) => (
+                    {listOfficeLayoutSVGData.map(({ svgBuisnessValue, svgDrawAttribut }) => (
                         <rect key={svgDrawAttribut.id} onClick={handleClick}
                             className={
                                 "rect " +

@@ -1,15 +1,15 @@
 import { DeskBookingService, SearchDeskCriteria } from '../../shared/services/rest/desk-booking.service';
+import { OfficeLayoutSVGData } from '../../shared/models/ihm/rest/office-layout.model';
 import { ErrorHandlerService } from '../../shared/services/ihm/error-handler.service';
 import { DatePickerFomat } from '../../shared/constants/date.constant';
 import { LOCALE } from '../../shared/constants/locale.constant';
 import { HEURE } from '../../shared/constants/label.constant';
+import { OfficeLayout } from '../OfficeLayout/OfficeLayout';
 import { Field } from '../../shared/models/ihm/form.model';
-import { OfficePlan } from '../OfficePlan/OfficePlan';
 import { FunctionComponent, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import './DeskBookingForm.css';
-import { DeskBookingState } from 'models/desk-booking-state';
 
 type Form = {
     checkInDateTime: Field<Date>;
@@ -21,7 +21,7 @@ export const DeskBookingForm: FunctionComponent = () => {
         checkInDateTime: { value: new Date(), isValid: true },
         checkOutDateTime: { value: new Date(), isValid: true }
     });
-    const [listDeskBookingState, setListDeskBookingState] = useState<DeskBookingState[]>([])
+    const [listOfficeLayoutSVGData, setListOfficeLayoutSVGData] = useState<OfficeLayoutSVGData[]>([])
 
     const onChangeCheckInDate = (date: Date): void => {
         setForm((form) => { return { ...form, checkInDateTime: { value: date, isValid: true } } });
@@ -38,8 +38,8 @@ export const DeskBookingForm: FunctionComponent = () => {
                 checkInDateTime: form.checkInDateTime.value,
                 checkOutDateTime: form.checkOutDateTime.value
             };
-            const result: DeskBookingState[] = await DeskBookingService.getListDeskBookingState(criteria);
-            setListDeskBookingState(result);
+            const result: OfficeLayoutSVGData[] = await DeskBookingService.getOfficeLayoutWithDeskBookingsState(criteria);
+            setListOfficeLayoutSVGData(result);
             console.log(result);
         } catch (error: any) {
             ErrorHandlerService.handleError(error);
@@ -78,7 +78,7 @@ export const DeskBookingForm: FunctionComponent = () => {
                 </div>
                 <button type="submit">Rechercher</button>
             </form>
-            <OfficePlan listDeskBookingState={listDeskBookingState} />
+            <OfficeLayout listOfficeLayoutSVGData={listOfficeLayoutSVGData} />
         </div>
     )
 }

@@ -1,4 +1,4 @@
 export namespace DeskBookingsUrl {
-    const BASE_URL: string = '/desk-bookings';
-    export const STATE: string = `${BASE_URL}/state`;
+    export const BASE_URL: string = '/desk-bookings';
+    export const STATE_OFFICE_LAYOUT: string = `${BASE_URL}/state/office-layout`;
 }
