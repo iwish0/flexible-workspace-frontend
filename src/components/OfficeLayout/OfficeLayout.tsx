@@ -1,53 +1,56 @@
+import { OfficeLayoutProps, OfficeLayoutTooltip } from '../UI/OfficeLayoutTooltip/OfficeLayoutTooltip';
 import { OfficeLayoutSVGData } from '../../shared/models/rest/office-layout.model';
-import React, { FunctionComponent } from 'react';
+import { DeskBookingState } from '../../shared/models/rest/desk-booking.model';
+import React, { FunctionComponent, useState } from 'react';
 import './OfficeLayout.css';
-import { DeskBookingService } from '../../shared/services/rest/desk-booking.service';
-import { DeskBooking } from '../../shared/models/rest/desk-booking.model';
 
 type Props = {
-    listOfficeLayoutSVGData: OfficeLayoutSVGData[]
+    listOfficeLayoutSVGData: OfficeLayoutSVGData[],
+    onSelectDesk: (deskBookingState: DeskBookingState) => void
 };
-export const OfficeLayout: FunctionComponent<Props> = ({ listOfficeLayoutSVGData }) => {
+export const OfficeLayout: FunctionComponent<Props> = ({ listOfficeLayoutSVGData, onSelectDesk }) => {
+    const [officeLayoutTooltipProps, setOfficeLayoutTooltipProps] = useState<OfficeLayoutProps>({ deskBookingState: null, isVisible: false, position: { top: 0, left: 0 } });
+
 
     const handleClick = (e: React.MouseEvent<SVGElement>) => {
         const deskName: string = e.currentTarget.id;
         const officeLayoutSGVData: OfficeLayoutSVGData | undefined = listOfficeLayoutSVGData.find(({ svgDrawAttribut }) => svgDrawAttribut.id === deskName);
         if (officeLayoutSGVData && !officeLayoutSGVData.deskBookingState.isBooked) {
-            const { deskBookingState } = officeLayoutSGVData;
-            const deskBooking: DeskBooking = {
-                user: {
-                    email: 'test@gmail.com',
-                    id: 1,
-                    name: 'John DOE'
-                },
-                comment: 'Je suis un commentaire libre',
-                checkInDateTime: deskBookingState.searchCriteria.checkInDateTime,
-                checkOutDateTime: deskBookingState.searchCriteria.checkOutDateTime,
-                deskId: deskBookingState.deskInfo._id
-            }
-            DeskBookingService.create(deskBooking).catch((error) => console.log(error));
+            onSelectDesk(officeLayoutSGVData.deskBookingState);
         }
+    }
+
+    const showBookingDetail = (e: React.MouseEvent<SVGElement>) => {
+        const deskName: string = e.currentTarget.id;
+        const officeLayoutSGVData: OfficeLayoutSVGData | undefined = listOfficeLayoutSVGData.find(({ svgDrawAttribut }) => svgDrawAttribut.id === deskName);
+        if (officeLayoutSGVData && officeLayoutSGVData.deskBookingState.isBooked) {
+            const { deskBookingState } = officeLayoutSGVData;
+            setOfficeLayoutTooltipProps({ deskBookingState, isVisible: true, position: { left: e.pageX, top: e.pageY } });
+        }
+    }
+
+    const hideBookingDetail = (e: React.MouseEvent<SVGElement>) => {
+        setOfficeLayoutTooltipProps((officeLayoutTooltipProps) => { return { ...officeLayoutTooltipProps, isVisible: false } });
     }
 
     return (
         <div>
+            <OfficeLayoutTooltip {...officeLayoutTooltipProps} />
             <svg width="640" height="480">
                 <g className="layer">
-                    <title>Layer 1</title>
                     <rect onClick={(e) => handleClick(e)} fill="#ffffff" height="248" id="svg_5" stroke="#000000" transform="matrix(1 0 0 1 0 0)" width="637" x="-17" y="-7" />
                     {listOfficeLayoutSVGData.map(({ deskBookingState, svgDrawAttribut }) => (
                         <rect key={svgDrawAttribut.id} onClick={handleClick}
-                            className={
-                                "rect " +
-                                (deskBookingState?.isBooked ? "red" : "green") +
-                                " m-4"
-                            }
+                            className={'rect ' + (deskBookingState?.isBooked ? 'red' : 'green')}
                             height={svgDrawAttribut.height}
                             id={svgDrawAttribut.id}
                             width={svgDrawAttribut.width}
                             x={svgDrawAttribut.x}
                             y={svgDrawAttribut.y}
-                        />
+                            onMouseMove={(e) => showBookingDetail(e)}
+                            onMouseOut={(e) => hideBookingDetail(e)}
+                        >
+                        </rect>
                     ))}
                     <text fill="#000000" font-family="Serif" font-size="24" id="svg_13" stroke="#000000" stroke-width="0" text-anchor="middle" transform="matrix(0.868642 0 0 0.888012 13.5158 9.90421)" x="73" xmlSpace="preserve" y="65">A1</text>
                     <text fill="#000000" font-family="Serif" font-size="24" id="svg_15" stroke="#000000" stroke-width="0" text-anchor="middle" transform="matrix(1 0 0 1 0 0) matrix(0.868642 0 0 0.888012 13.5158 9.90421)" x="248.06" xmlSpace="preserve" y="70.58">A2</text>

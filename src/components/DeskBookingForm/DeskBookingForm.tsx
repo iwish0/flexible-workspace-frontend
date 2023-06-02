@@ -1,7 +1,7 @@
 import { DeskBookingService, SearchDeskCriteria } from '../../shared/services/rest/desk-booking.service';
 import { OfficeLayoutSVGData } from '../../shared/models/rest/office-layout.model';
 import { ErrorHandlerService } from '../../shared/services/ihm/error-handler.service';
-import { DatePickerFomat } from '../../shared/constants/date.constant';
+import { DD_MM_YYYY } from '../../shared/constants/date.constant';
 import { LOCALE } from '../../shared/constants/locale.constant';
 import { HEURE } from '../../shared/constants/label.constant';
 import { OfficeLayout } from '../OfficeLayout/OfficeLayout';
@@ -10,6 +10,8 @@ import { FunctionComponent, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import './DeskBookingForm.css';
+import { DeskBooking, DeskBookingState } from '../../shared/models/rest/desk-booking.model';
+import { DeskBookingConfirmModal } from '../DeskBookingConfirmModal/DeskBookingConfirmModal';
 
 type Form = {
     checkInDateTime: Field<Date>;
@@ -21,7 +23,42 @@ export const DeskBookingForm: FunctionComponent = () => {
         checkInDateTime: { value: new Date(), isValid: true },
         checkOutDateTime: { value: new Date(), isValid: true }
     });
-    const [listOfficeLayoutSVGData, setListOfficeLayoutSVGData] = useState<OfficeLayoutSVGData[]>([])
+
+    const [listOfficeLayoutSVGData, setListOfficeLayoutSVGData] = useState<OfficeLayoutSVGData[]>([]);
+    const [isBookingConfirmModalVisible, setIsBookingConfirmModalVisible] = useState<boolean>(false);
+    const [selectedDesk, setSelectedDesk] = useState<DeskBookingState | undefined>();
+
+    const onSelectDesk = (deskBookingState: DeskBookingState) => {
+        setIsBookingConfirmModalVisible(true);
+        setSelectedDesk(deskBookingState);
+    }
+
+    const closeBookingConfirmModal = (): void => {
+        setIsBookingConfirmModalVisible(false);
+    }
+
+    const onConfirmBooking = async (comment: string) => {
+        setIsBookingConfirmModalVisible(false);
+        if (selectedDesk) {
+            const deskBooking: DeskBooking = {
+                user: {
+                    email: 'john_doe@gmail.com',
+                    id: 123456789,
+                    name: 'John DOE'
+                },
+                comment,
+                checkInDateTime: selectedDesk.searchCriteria.checkInDateTime,
+                checkOutDateTime: selectedDesk.searchCriteria.checkOutDateTime,
+                deskId: selectedDesk.deskInfo._id
+            }
+            try {
+                await DeskBookingService.create(deskBooking);
+                getOfficeLayoutWithDeskBookingsState();
+            } catch (error: any) {
+                ErrorHandlerService.handleError(error);
+            }
+        }
+    }
 
     const onChangeCheckInDate = (date: Date): void => {
         setForm((form) => { return { ...form, checkInDateTime: { value: date, isValid: true } } });
@@ -32,19 +69,21 @@ export const DeskBookingForm: FunctionComponent = () => {
     }
 
     async function handleSubmit(e: any) {
+        e.preventDefault();
+        getOfficeLayoutWithDeskBookingsState();
+    }
+
+    const getOfficeLayoutWithDeskBookingsState = async () => {
         try {
-            e.preventDefault();
             const criteria: SearchDeskCriteria = {
                 checkInDateTime: form.checkInDateTime.value,
                 checkOutDateTime: form.checkOutDateTime.value
             };
             const result: OfficeLayoutSVGData[] = await DeskBookingService.getOfficeLayoutWithDeskBookingsState(criteria);
             setListOfficeLayoutSVGData(result);
-            console.log(result);
         } catch (error: any) {
             ErrorHandlerService.handleError(error);
         }
-
     }
 
     return (
@@ -60,7 +99,7 @@ export const DeskBookingForm: FunctionComponent = () => {
                         timeCaption={HEURE}
                         timeIntervals={15}
                         locale={LOCALE}
-                        dateFormat={DatePickerFomat.DD_MM_YYYY}
+                        dateFormat={DD_MM_YYYY}
 
                     />
                 </div>
@@ -73,12 +112,21 @@ export const DeskBookingForm: FunctionComponent = () => {
                         timeCaption={HEURE}
                         timeIntervals={15}
                         locale={LOCALE}
-                        dateFormat={DatePickerFomat.DD_MM_YYYY}
+                        dateFormat={DD_MM_YYYY}
                     />
                 </div>
                 <button type="submit">Rechercher</button>
             </form>
-            <OfficeLayout listOfficeLayoutSVGData={listOfficeLayoutSVGData} />
+            <OfficeLayout listOfficeLayoutSVGData={listOfficeLayoutSVGData} onSelectDesk={onSelectDesk} />
+            {selectedDesk &&
+                <DeskBookingConfirmModal
+                    visible={isBookingConfirmModalVisible}
+                    onCancel={closeBookingConfirmModal}
+                    onConfirm={onConfirmBooking}
+                    deskInfo={selectedDesk.deskInfo}
+                    searchCriteria={selectedDesk.searchCriteria}
+                />
+            }
         </div>
     )
 }
