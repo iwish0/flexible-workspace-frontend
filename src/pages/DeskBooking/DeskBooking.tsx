@@ -3,5 +3,9 @@ import { DeskBookingForm } from '../../components/DeskBookingForm/DeskBookingFor
 import './DeskBooking.css';
 
 export const DeskBooking: FunctionComponent = () => {
-    return (<div className='content'><DeskBookingForm /></div>);
-}
+  return (
+    <div className='content'>
+      <DeskBookingForm />
+    </div>
+  );
+};
