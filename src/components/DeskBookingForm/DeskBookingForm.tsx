@@ -1,6 +1,8 @@
 import { DeskBookingService, SearchDeskCriteria } from '../../shared/services/rest/desk-booking.service';
-import { OfficeLayoutSVGData } from '../../shared/models/rest/office-layout.model';
+import { DeskBookingConfirmModal } from '../DeskBookingConfirmModal/DeskBookingConfirmModal';
+import { DeskBooking, DeskBookingState } from '../../shared/models/rest/desk-booking.model';
 import { ErrorHandlerService } from '../../shared/services/ihm/error-handler.service';
+import { OfficeLayoutSVGData } from '../../shared/models/rest/office-layout.model';
 import { DD_MM_YYYY } from '../../shared/constants/date.constant';
 import { LOCALE } from '../../shared/constants/locale.constant';
 import { HEURE } from '../../shared/constants/label.constant';
@@ -8,10 +10,9 @@ import { OfficeLayout } from '../OfficeLayout/OfficeLayout';
 import { Field } from '../../shared/models/ihm/form.model';
 import { FunctionComponent, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Button, Loading } from '@nextui-org/react';
 import DatePicker from 'react-datepicker';
 import './DeskBookingForm.css';
-import { DeskBooking, DeskBookingState } from '../../shared/models/rest/desk-booking.model';
-import { DeskBookingConfirmModal } from '../DeskBookingConfirmModal/DeskBookingConfirmModal';
 
 type Form = {
     checkInDateTime: Field<Date>;
@@ -27,6 +28,7 @@ export const DeskBookingForm: FunctionComponent = () => {
     const [listOfficeLayoutSVGData, setListOfficeLayoutSVGData] = useState<OfficeLayoutSVGData[]>([]);
     const [isBookingConfirmModalVisible, setIsBookingConfirmModalVisible] = useState<boolean>(false);
     const [selectedDesk, setSelectedDesk] = useState<DeskBookingState | undefined>();
+    const [loading, setLoading] = useState<boolean>(false);
 
     const onSelectDesk = (deskBookingState: DeskBookingState) => {
         setIsBookingConfirmModalVisible(true);
@@ -38,6 +40,7 @@ export const DeskBookingForm: FunctionComponent = () => {
     }
 
     const onConfirmBooking = async (comment: string) => {
+        setLoading(true);
         setIsBookingConfirmModalVisible(false);
         if (selectedDesk) {
             const deskBooking: DeskBooking = {
@@ -56,6 +59,8 @@ export const DeskBookingForm: FunctionComponent = () => {
                 getOfficeLayoutWithDeskBookingsState();
             } catch (error: any) {
                 ErrorHandlerService.handleError(error);
+            } finally {
+                setLoading(false);
             }
         }
     }
@@ -68,9 +73,14 @@ export const DeskBookingForm: FunctionComponent = () => {
         setForm((form) => { return { ...form, checkOutDateTime: { value: date, isValid: true } } });
     }
 
-    async function handleSubmit(e: any) {
+    async function handleSubmit(e: any): Promise<void> {
         e.preventDefault();
-        getOfficeLayoutWithDeskBookingsState();
+        setLoading(true);
+        try {
+            await getOfficeLayoutWithDeskBookingsState();
+        } finally {
+            setLoading(false);
+        }
     }
 
     const getOfficeLayoutWithDeskBookingsState = async () => {
@@ -88,45 +98,53 @@ export const DeskBookingForm: FunctionComponent = () => {
 
     return (
         <div className='container'>
-            <h2>Rechercher un bureau de disponible</h2>
-            <form className='form' onSubmit={handleSubmit} >
-                <div className='form-group'>
-                    <label>Date de début</label>
-                    <DatePicker
-                        selected={form.checkInDateTime.value}
-                        onChange={onChangeCheckInDate}
-                        showTimeSelect
-                        timeCaption={HEURE}
-                        timeIntervals={15}
-                        locale={LOCALE}
-                        dateFormat={DD_MM_YYYY}
+            {loading ? (<Loading className='container' color={'secondary'} size='xl' />) : (
+                <div>
+                    <div className='blocForm'>
+                        <h2>Rechercher un bureau de disponible</h2>
+                        <form className='form' onSubmit={handleSubmit} >
+                            <div className='form-group'>
+                                <label>Date de début</label>
+                                <DatePicker
+                                    className='datepicker'
+                                    selected={form.checkInDateTime.value}
+                                    onChange={onChangeCheckInDate}
+                                    showTimeSelect
+                                    timeCaption={HEURE}
+                                    timeIntervals={15}
+                                    locale={LOCALE}
+                                    dateFormat={DD_MM_YYYY}
 
-                    />
-                </div>
-                <div className='form-group'>
-                    <label>Date de fin</label>
-                    <DatePicker
-                        selected={form.checkOutDateTime.value}
-                        onChange={onChangeCheckOutDate}
-                        showTimeSelect
-                        timeCaption={HEURE}
-                        timeIntervals={15}
-                        locale={LOCALE}
-                        dateFormat={DD_MM_YYYY}
-                    />
-                </div>
-                <button type="submit">Rechercher</button>
-            </form>
-            <OfficeLayout listOfficeLayoutSVGData={listOfficeLayoutSVGData} onSelectDesk={onSelectDesk} />
-            {selectedDesk &&
-                <DeskBookingConfirmModal
-                    visible={isBookingConfirmModalVisible}
-                    onCancel={closeBookingConfirmModal}
-                    onConfirm={onConfirmBooking}
-                    deskInfo={selectedDesk.deskInfo}
-                    searchCriteria={selectedDesk.searchCriteria}
-                />
-            }
+                                />
+                            </div>
+                            <div className='form-group'>
+                                <label>Date de fin</label>
+                                <DatePicker
+                                    className='datepicker'
+                                    selected={form.checkOutDateTime.value}
+                                    onChange={onChangeCheckOutDate}
+                                    showTimeSelect
+                                    timeCaption={HEURE}
+                                    timeIntervals={15}
+                                    locale={LOCALE}
+                                    dateFormat={DD_MM_YYYY}
+                                />
+                            </div>
+                            <Button type='submit' color={'secondary'}>Rechercher</Button>
+                        </form>
+                    </div>
+
+                    <OfficeLayout listOfficeLayoutSVGData={listOfficeLayoutSVGData} onSelectDesk={onSelectDesk} />
+                    {selectedDesk &&
+                        <DeskBookingConfirmModal
+                            visible={isBookingConfirmModalVisible}
+                            onCancel={closeBookingConfirmModal}
+                            onConfirm={onConfirmBooking}
+                            deskInfo={selectedDesk.deskInfo}
+                            searchCriteria={selectedDesk.searchCriteria}
+                        />
+                    }
+                </div>)}
         </div>
     )
 }

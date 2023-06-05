@@ -8,7 +8,7 @@ export const router = createBrowserRouter([
         path: '/',
         element: <RootLayout />,
         children: [{
-            path: DESK_BOOKING,
+            path: '',
             element: <DeskBooking />
         }]
     }]
