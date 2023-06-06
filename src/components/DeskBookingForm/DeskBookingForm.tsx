@@ -46,7 +46,7 @@ export const DeskBookingForm: FunctionComponent = () => {
             const deskBooking: DeskBooking = {
                 user: {
                     email: 'john_doe@gmail.com',
-                    id: 123456789,
+                    id: 123,
                     name: 'John DOE'
                 },
                 comment,

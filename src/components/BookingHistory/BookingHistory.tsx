@@ -57,40 +57,40 @@ export const BookingHistory: FunctionComponent = () => {
         <div>
           <Grid.Container gap={2}>
             {bookings.map(({ bookingInfo, deskInfo }) => (
-              <Grid key={bookingInfo._id} xs={12} sm={6} md={4}>
-                <Card css={{ mw: "330px" }}>
+              <Grid className='grid' key={bookingInfo._id} xs={12} sm={6} md={4} xl={3}>
+                <Card css={{ mw: '330px' }}>
                   <Card.Header>
                     <Text b>Réservé le {DateHelper.formatDate(bookingInfo.dateCreated || '')} </Text>
                   </Card.Header>
                   <Card.Divider />
-                  <Card.Body css={{ py: "$10" }}>
-                    <div className="flex-row">
+                  <Card.Body css={{ py: '$10' }}>
+                    <div className='flex-row'>
                       <span>Date de début :</span>
                       <span>{DateHelper.formatDate(bookingInfo.checkInDateTime)}</span>
                     </div>
-                    <div className="flex-row">
+                    <div className='flex-row'>
                       <span>Date de fin :</span>
                       <span>{DateHelper.formatDate(bookingInfo.checkOutDateTime)}</span>
                     </div>
-                    <div className="flex-row">
+                    <div className='flex-row'>
                       <span>Emplacement:</span>
                       <span>{deskInfo.name}</span>
                     </div>
                     <Divider css={{ mb: 10, mt: 10 }} />
-                    <div className="comment">
+                    <div className='comment'>
                       <span>Commentaire:</span>
                       <span>{bookingInfo.comment}</span>
                     </div>
                   </Card.Body>
                   <Card.Divider />
                   <Card.Footer>
-                    <Row justify="flex-end">
-                      {/* <Button size="sm" light>
+                    <Row justify='flex-end'>
+                      {/* <Button size='sm' light>
                   Modifier
                 </Button> */}
                       <Button
                         onClick={() => openDeleteBookingModal(bookingInfo)}
-                        size="sm"
+                        size='sm'
                         color='secondary'>
                         Supprimer
                       </Button>
