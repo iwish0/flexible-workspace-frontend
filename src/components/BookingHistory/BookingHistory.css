@@ -1,0 +1,11 @@
+.flex-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.comment {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    text-align: justify;
+}

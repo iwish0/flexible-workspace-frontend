@@ -18,7 +18,7 @@ export const DeskBookingConfirmModal: FunctionComponent<Props> = ({ visible, onC
     const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement | FormElement>): void => {
         const comment: string = e.target.value;
         setComment(comment);
-    }
+    };
 
     return (
         <Modal
@@ -42,7 +42,7 @@ export const DeskBookingConfirmModal: FunctionComponent<Props> = ({ visible, onC
                     <span>{DateHelper.formatDate(searchCriteria.checkOutDateTime)}</span>
                 </div>
                 <div className="item">
-                    <span>Emplacement</span>
+                    <span>Emplacement:</span>
                     <span>{deskInfo.name}</span>
                 </div>
                 <Textarea css={{ mt: 12 }}
