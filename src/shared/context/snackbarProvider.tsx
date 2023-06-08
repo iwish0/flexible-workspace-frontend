@@ -11,6 +11,7 @@ const SnackbarContext = createContext<{
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   dispatch: () => {}
 });
+//TODO COUCOU COPAIN
 
 export default function SnackbarProvider({ children }: { children: React.ReactNode }) {
   const [{ queue }, dispatch] = useReducer(snackbarReducer, { queue: [] });
