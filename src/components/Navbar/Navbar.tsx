@@ -1,12 +1,12 @@
 import { DESK_BOOKING_KEY, DROPDOWN_MENU_ITEMS } from '../../shared/constants/navbar.constant';
 import { Button, Dropdown, Link, Navbar as NavBarNextUI } from '@nextui-org/react';
+import { NavigationService } from '../../shared/services/ihm/navigation.service';
 import { Location, NavigateFunction, useNavigate } from 'react-router-dom';
 import { LocationState } from '../../shared/models/ihm/navigation.model';
 import { FunctionComponent, useState, Key, useEffect } from 'react';
 import { Route } from '../../shared/constants/route.constant';
 import { useLocation } from 'react-router-dom'
 import './Navbar.css';
-import { NavigationService } from '../../shared/services/ihm/navigation.service';
 
 export const Navbar: FunctionComponent = () => {
     const location: Location = useLocation();

@@ -10,7 +10,7 @@ export const DROPDOWN_MENU_ITEMS: { label: string, key: string, description: str
     },
     {
         label: 'Salle',
-        key: DESK_BOOKING_KEY,
+        key: Route.ROOM_BOOKING,
         description: 'Salle de réunion, bureau individuel...',
         icon: ''
     }
