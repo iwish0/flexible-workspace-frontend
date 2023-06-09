@@ -109,12 +109,8 @@ export const DeskBookingForm: FunctionComponent = () => {
                                     className='datepicker'
                                     selected={form.checkInDateTime.value}
                                     onChange={onChangeCheckInDate}
-                                    showTimeSelect
-                                    timeCaption={HEURE}
-                                    timeIntervals={15}
                                     locale={LOCALE}
                                     dateFormat={DD_MM_YYYY}
-
                                 />
                             </div>
                             <div className='form-group'>
@@ -123,17 +119,13 @@ export const DeskBookingForm: FunctionComponent = () => {
                                     className='datepicker'
                                     selected={form.checkOutDateTime.value}
                                     onChange={onChangeCheckOutDate}
-                                    showTimeSelect
-                                    timeCaption={HEURE}
-                                    timeIntervals={15}
                                     locale={LOCALE}
                                     dateFormat={DD_MM_YYYY}
                                 />
                             </div>
-                            <Button type='submit' color={'secondary'}>Rechercher</Button>
+                            <Button type='submit' color={'primary'}>Rechercher</Button>
                         </form>
                     </div>
-
                     <OfficeLayout listOfficeLayoutSVGData={listOfficeLayoutSVGData} onSelectDesk={onSelectDesk} />
                     {selectedDesk &&
                         <DeskBookingConfirmModal

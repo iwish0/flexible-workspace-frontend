@@ -91,7 +91,7 @@ export const BookingHistory: FunctionComponent = () => {
                       <Button
                         onClick={() => openDeleteBookingModal(bookingInfo)}
                         size='sm'
-                        color='secondary'>
+                        color='primary'>
                         Supprimer
                       </Button>
                     </Row>
