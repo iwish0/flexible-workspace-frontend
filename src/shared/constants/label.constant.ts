@@ -1,2 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-inferrable-types
 export const HEURE: string = 'Heure';
+export const CANCEL: string = 'Annuler';
+export const CONFIRM: string = 'Confirmer';
