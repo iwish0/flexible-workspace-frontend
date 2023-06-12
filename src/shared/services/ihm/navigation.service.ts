@@ -1,12 +1,20 @@
+import { RouteStatus } from '../../models/ihm/navigation.model'
 import { Route } from '../../constants/route.constant'
-import { LocationState } from '../../models/ihm/navigation.model'
 
 export class NavigationService {
 
-    public static getLocationStatus = (pathname: string): LocationState => {
+    public static getRouteStatus(pathname: string): RouteStatus {
+        const selectedRoute: string = NavigationService.pathNameToRoute(pathname);
         return {
-            isPathNameDeskBooking: pathname === `${Route.ROOT}${Route.DESK_BOOKING}`,
-            isPathNameUserBookingHistory: pathname === `${Route.ROOT}${Route.USER_BOOKING_HISTORY}`
+            isRouteDeskBooking: selectedRoute === `${Route.DESK_BOOKING}`,
+            isRouteUserBookingHistory: selectedRoute === `${Route.USER_BOOKING_HISTORY}`
         };
+    }
+
+    /**
+     * Remove the firt character '/' of the pathName
+     */
+    public static pathNameToRoute(pathName: string): string {
+        return pathName ? pathName.slice(1) : '';
     }
 }
