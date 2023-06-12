@@ -15,3 +15,9 @@ export const DROPDOWN_MENU_ITEMS: { label: string, key: string, description: str
         icon: ''
     }
 ];
+
+export const collapseItems: { label: string, route: string }[] = [
+    { label: 'Réserver un bureau', route: Route.DESK_BOOKING },
+    { label: 'Réserver une salle', route: Route.ROOM_BOOKING },
+    { label: 'Historique', route: Route.USER_BOOKING_HISTORY },
+];

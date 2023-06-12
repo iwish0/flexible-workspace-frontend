@@ -1,4 +1,4 @@
-export type LocationState = {
-    isPathNameDeskBooking: boolean;
-    isPathNameUserBookingHistory: boolean;
+export type RouteStatus = {
+    isRouteDeskBooking: boolean;
+    isRouteUserBookingHistory: boolean;
 }
