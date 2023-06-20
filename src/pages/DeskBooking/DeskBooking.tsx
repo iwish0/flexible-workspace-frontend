@@ -1,5 +1,5 @@
-import { FunctionComponent } from 'react';
 import { DeskBookingForm } from '../../components/DeskBookingForm/DeskBookingForm';
+import { FunctionComponent } from 'react';
 import './DeskBooking.css';
 
 export const DeskBooking: FunctionComponent = () => {

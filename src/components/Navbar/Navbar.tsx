@@ -88,7 +88,7 @@ export const Navbar: FunctionComponent = () => {
                     </NavBarNextUI.Item>
                     <Dropdown.Menu
                         color='default'
-                        aria-label='Réservation d\une place ou d\une salle'
+                        aria-label='Réservation d une place ou d une salle'
                         selectionMode='single'
                         selectedKeys={selectedDropdownMenuItem}
                         onAction={(key: Key) => onSelectDropdownMenuItem(key)}

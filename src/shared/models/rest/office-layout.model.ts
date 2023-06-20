@@ -1,4 +1,5 @@
 import { DeskBookingState } from './desk-booking.model';
+import { RoomBookingState } from './room-booking.model';
 
 export type SvgRectAttribut = {
     id: string;
@@ -11,4 +12,9 @@ export type SvgRectAttribut = {
 export type OfficeLayoutSVGData = {
     svgDrawAttribut: SvgRectAttribut;
     deskBookingState: DeskBookingState;
+}
+
+export type RoomOfficeLayoutSVGData = {
+    svgDrawAttribut: SvgRectAttribut;
+    roomBookingState: RoomBookingState;
 }

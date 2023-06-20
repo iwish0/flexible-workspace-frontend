@@ -1,0 +1,23 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.blocForm {
+    padding: 2rem;
+    background-color: white !important;
+    border: 1px solid #eeeeee;
+    border-radius: 1rem;
+}
+
+.blocForm>h2 {
+    font-size: 1.5rem;
+}
