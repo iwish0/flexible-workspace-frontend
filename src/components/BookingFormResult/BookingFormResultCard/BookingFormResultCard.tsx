@@ -24,7 +24,7 @@ export const BookingFormResultCard: FunctionComponent<Props> = ({ data: {
 },
     onSelectItem
 }) => {
-    return (<Card css={{mw:330}}>
+    return (<Card css={{ mw: 330 }}>
         <Card.Header>
             <Container>
                 <Row justify='space-between'>
@@ -41,10 +41,10 @@ export const BookingFormResultCard: FunctionComponent<Props> = ({ data: {
                 <Text b>Localisation</Text>
                 <Text>{location}</Text>
             </Row>
-            { maxCapacity && <Row justify='space-between' align='center'>
+            {maxCapacity && <Row justify='space-between' align='center'>
                 <Text b>Nombre de personnes max.</Text>
                 <Text>{maxCapacity}</Text>
-            </Row> }
+            </Row>}
             {isBooked &&
                 <>
                     {user && (<Row justify='space-between' align='center'>

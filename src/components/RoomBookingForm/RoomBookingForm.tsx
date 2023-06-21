@@ -37,7 +37,7 @@ export const RoomBookingForm: FunctionComponent = () => {
       placeName: ''
 
     });
-  const [selectedRoom, setSelectedRoom] = useState<RoomBookingState | undefined>();
+  const [selectedRoom, setSelectedRoom] = useState<RoomBookingState | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -54,7 +54,8 @@ export const RoomBookingForm: FunctionComponent = () => {
   }, [selectedRoom]);
 
   const onSelectRoom = (roomBookingState: RoomBookingState): void => {
-    setSelectedRoom(roomBookingState);
+    setSelectedRoom(() => { return { ...roomBookingState } });
+
   };
 
   const closeBookingConfirmModal = (): void => {
@@ -168,14 +169,12 @@ export const RoomBookingForm: FunctionComponent = () => {
             listOfficeLayoutSVGData={listOfficeLayoutSVGData}
             onSelectElement={onSelectRoom}
           />
-          {selectedRoom && (
-            <BookingConfirmModal
-              visible={isBookingConfirmModalVisible}
-              onCancel={closeBookingConfirmModal}
-              onConfirm={onConfirmBooking}
-              bookingConfirmationModalData={bookingConfirmationModalData}
-            />
-          )}
+          <BookingConfirmModal
+            visible={isBookingConfirmModalVisible}
+            onCancel={closeBookingConfirmModal}
+            onConfirm={onConfirmBooking}
+            bookingConfirmationModalData={bookingConfirmationModalData}
+          />
         </div>
       )}
     </div>

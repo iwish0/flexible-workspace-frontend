@@ -40,7 +40,6 @@ export const DeskBookingForm: FunctionComponent = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log('use effect!!!!')
     if (selectedDesk) {
       setBookingConfirmationModalData(data => {
         return {
@@ -50,17 +49,16 @@ export const DeskBookingForm: FunctionComponent = () => {
           placeName: selectedDesk.deskInfo.name
         }
       });
+      setIsBookingConfirmModalVisible(true);
     }
-    setIsBookingConfirmModalVisible(true);
   }, [selectedDesk]);
 
-  const onSelectDesk = (deskBookingState: DeskBookingState) => {
-    setSelectedDesk(deskBookingState);
+  const onSelectDesk = (deskBookingState: DeskBookingState): void => {
+    setSelectedDesk(() => { return { ...deskBookingState } });
   };
 
   const closeBookingConfirmModal = (): void => {
     setIsBookingConfirmModalVisible(false);
-    setSelectedDesk(null);
   };
 
   const onConfirmBooking = async (comment: string) => {
@@ -159,19 +157,17 @@ export const DeskBookingForm: FunctionComponent = () => {
             </form>
           </div>
           <BookingFormResult data={SearchResultDetailService.formatDesksDataToSearchResultData(listOfficeLayoutSVGData)} onSelectItem={onSelectDesk} />
-       
-          {/* <OfficeLayout
+
+          <OfficeLayout
             listOfficeLayoutSVGData={listOfficeLayoutSVGData}
             onSelectDesk={onSelectDesk}
-          /> */}
-          {selectedDesk && (
-            <BookingConfirmModal
-              visible={isBookingConfirmModalVisible}
-              onCancel={closeBookingConfirmModal}
-              onConfirm={onConfirmBooking}
-              bookingConfirmationModalData={bookingConfirmationModalData}
-            />
-          )}
+          />
+          <BookingConfirmModal
+            visible={isBookingConfirmModalVisible}
+            onCancel={closeBookingConfirmModal}
+            onConfirm={onConfirmBooking}
+            bookingConfirmationModalData={bookingConfirmationModalData}
+          />
         </div>
       )}
     </div>
