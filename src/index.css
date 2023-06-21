@@ -12,6 +12,18 @@ code {
     monospace;
 }
 
+.page-content {
+  padding: 2rem;
+  width: 80%;
+  margin: auto;
+}
+
+@media screen and (max-width: 1100px) {
+  .page-content {
+    width: 100%;
+  }
+}
+
 .loader {
   display: flex;
   flex-direction: column;

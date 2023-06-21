@@ -5,19 +5,21 @@ import {
 import { BookingConfirmModal, BookingConfirmationModalData } from '../BookingConfirmModal/BookingConfirmModal';
 import { DeskBooking, DeskBookingState } from '../../shared/models/rest/desk-booking.model';
 import { ErrorHandlerService } from '../../shared/services/ihm/error-handler.service';
-import { OfficeLayoutSVGData } from '../../shared/models/rest/office-layout.model';
+import { DeskOfficeLayoutSVGData } from '../../shared/models/rest/office-layout.model';
 import { SnackbarVariant } from '../../shared/models/ihm/snackbar.model';
 import { useSnackbar } from '../../shared/context/snackbarProvider';
 import { DD_MM_YYYY } from '../../shared/constants/date.constant';
 import { LOCALE } from '../../shared/constants/locale.constant';
 import { FunctionComponent, useEffect, useState } from 'react';
 import { DateHelper } from '../../shared/helpers/date.helper';
-import { Button, Divider, Loading } from '@nextui-org/react';
+import { Button, Divider, Grid, Loading } from '@nextui-org/react';
 import { OfficeLayout } from '../OfficeLayout/OfficeLayout';
 import { Field } from '../../shared/models/ihm/form.model';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import './DeskBookingForm.css';
+import { SearchResultDetailService } from '../../shared/services/ihm/search-result-detail.service';
+import { BookingFormResult } from '../BookingFormResult/BookingFormResult';
 
 type Form = {
   checkInDateTime: Field<Date>;
@@ -31,13 +33,14 @@ export const DeskBookingForm: FunctionComponent = () => {
     checkOutDateTime: { value: new Date(), isValid: true }
   });
 
-  const [listOfficeLayoutSVGData, setListOfficeLayoutSVGData] = useState<OfficeLayoutSVGData[]>([]);
+  const [listOfficeLayoutSVGData, setListOfficeLayoutSVGData] = useState<DeskOfficeLayoutSVGData[]>([]);
   const [isBookingConfirmModalVisible, setIsBookingConfirmModalVisible] = useState<boolean>(false);
   const [bookingConfirmationModalData, setBookingConfirmationModalData] = useState<BookingConfirmationModalData>({ checkInDate: '', checkOutDate: '', placeName: '' });
-  const [selectedDesk, setSelectedDesk] = useState<DeskBookingState | undefined>();
+  const [selectedDesk, setSelectedDesk] = useState<DeskBookingState | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    console.log('use effect!!!!')
     if (selectedDesk) {
       setBookingConfirmationModalData(data => {
         return {
@@ -57,6 +60,7 @@ export const DeskBookingForm: FunctionComponent = () => {
 
   const closeBookingConfirmModal = (): void => {
     setIsBookingConfirmModalVisible(false);
+    setSelectedDesk(null);
   };
 
   const onConfirmBooking = async (comment: string) => {
@@ -97,23 +101,21 @@ export const DeskBookingForm: FunctionComponent = () => {
     });
   };
 
-  function handleSubmit(e: any): void {
+  const handleSubmit = (e: any): void => {
     e.preventDefault();
     getOfficeLayoutWithDeskBookingsState();
   }
 
   const getOfficeLayoutWithDeskBookingsState = async () => {
     setLoading(true);
-
     try {
       const criteria: SearchDeskCriteria = {
         checkInDateTime: form.checkInDateTime.value,
         checkOutDateTime: form.checkOutDateTime.value
       }
-      const result: OfficeLayoutSVGData[] =
+      const result: DeskOfficeLayoutSVGData[] =
         await DeskBookingService.getOfficeLayoutWithDeskBookingsState(criteria);
       setListOfficeLayoutSVGData(result);
-
     } finally {
       setLoading(false);
     }
@@ -156,10 +158,12 @@ export const DeskBookingForm: FunctionComponent = () => {
               </div>
             </form>
           </div>
-          <OfficeLayout
+          <BookingFormResult data={SearchResultDetailService.formatDesksDataToSearchResultData(listOfficeLayoutSVGData)} onSelectItem={onSelectDesk} />
+       
+          {/* <OfficeLayout
             listOfficeLayoutSVGData={listOfficeLayoutSVGData}
             onSelectDesk={onSelectDesk}
-          />
+          /> */}
           {selectedDesk && (
             <BookingConfirmModal
               visible={isBookingConfirmModalVisible}

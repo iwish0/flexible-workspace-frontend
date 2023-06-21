@@ -4,7 +4,7 @@ import './DeskBooking.css';
 
 export const DeskBooking: FunctionComponent = () => {
   return (
-    <div className='content'>
+    <div className='page-content'>
       <DeskBookingForm />
     </div>
   );

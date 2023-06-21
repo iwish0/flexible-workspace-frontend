@@ -1,4 +1,4 @@
-import { OfficeLayoutSVGData } from '../../models/rest/office-layout.model';
+import { DeskOfficeLayoutSVGData } from '../../models/rest/office-layout.model';
 import { DeskBooking, DeskBookingInfo } from '../../models/rest/desk-booking.model';
 import { DeskBookingsUrl } from '../../constants/url.constant';
 import axios, { AxiosResponse } from 'axios';
@@ -15,8 +15,8 @@ export class DeskBookingService {
         return result.data;
     }
 
-    public static async getOfficeLayoutWithDeskBookingsState(criteria: SearchDeskCriteria): Promise<OfficeLayoutSVGData[]> {
-        const result: AxiosResponse<OfficeLayoutSVGData[]> = await axios.post<OfficeLayoutSVGData[]>(DeskBookingsUrl.STATE_OFFICE_LAYOUT, criteria);
+    public static async getOfficeLayoutWithDeskBookingsState(criteria: SearchDeskCriteria): Promise<DeskOfficeLayoutSVGData[]> {
+        const result: AxiosResponse<DeskOfficeLayoutSVGData[]> = await axios.post<DeskOfficeLayoutSVGData[]>(DeskBookingsUrl.STATE_OFFICE_LAYOUT, criteria);
         return result.data;
     }
 

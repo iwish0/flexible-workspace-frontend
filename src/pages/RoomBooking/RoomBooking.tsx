@@ -4,7 +4,7 @@ import './RoomBooking.css';
 
 export const RoomBooking: FunctionComponent = () => {
   return (
-    <div className='content'>
+    <div className='page-content'>
       <RoomBookingForm />
     </div>
   );

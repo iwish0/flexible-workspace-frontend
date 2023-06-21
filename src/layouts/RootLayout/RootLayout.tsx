@@ -11,7 +11,7 @@ export const RootLayout: FunctionComponent = () => {
       <SnackbarProvider>
         <Outlet />
       </SnackbarProvider>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

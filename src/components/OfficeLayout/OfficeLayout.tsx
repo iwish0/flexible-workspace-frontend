@@ -3,13 +3,13 @@ import {
   OfficeLayoutProps,
   OfficeLayoutTooltip
 } from '../UI/OfficeLayoutTooltip/OfficeLayoutTooltip';
-import { OfficeLayoutSVGData } from '../../shared/models/rest/office-layout.model';
+import { DeskOfficeLayoutSVGData } from '../../shared/models/rest/office-layout.model';
 import { DeskBookingState } from '../../shared/models/rest/desk-booking.model';
 import React, { FunctionComponent, useState } from 'react';
 import './OfficeLayout.css';
 
 type Props = {
-  listOfficeLayoutSVGData: OfficeLayoutSVGData[];
+  listOfficeLayoutSVGData: DeskOfficeLayoutSVGData[];
   onSelectDesk: (deskBookingState: DeskBookingState) => void;
 };
 export const OfficeLayout: FunctionComponent<Props> = ({
@@ -24,7 +24,7 @@ export const OfficeLayout: FunctionComponent<Props> = ({
 
   const handleClick = (e: React.MouseEvent<SVGElement>) => {
     const deskName: string = e.currentTarget.id;
-    const officeLayoutSGVData: OfficeLayoutSVGData | undefined = listOfficeLayoutSVGData.find(
+    const officeLayoutSGVData: DeskOfficeLayoutSVGData | undefined = listOfficeLayoutSVGData.find(
       ({ svgDrawAttribut }) => svgDrawAttribut.id === deskName
     );
     if (officeLayoutSGVData && !officeLayoutSGVData.deskBookingState.isBooked) {
@@ -34,7 +34,7 @@ export const OfficeLayout: FunctionComponent<Props> = ({
 
   const showBookingDetail = (e: React.MouseEvent<SVGElement>) => {
     const deskName: string = e.currentTarget.id;
-    const officeLayoutSGVData: OfficeLayoutSVGData | undefined = listOfficeLayoutSVGData.find(
+    const officeLayoutSGVData: DeskOfficeLayoutSVGData | undefined = listOfficeLayoutSVGData.find(
       ({ svgDrawAttribut }) => svgDrawAttribut.id === deskName
     );
     if (officeLayoutSGVData && officeLayoutSGVData.deskBookingState.isBooked) {

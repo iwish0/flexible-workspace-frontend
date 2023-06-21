@@ -9,7 +9,7 @@ export type SvgRectAttribut = {
     y: string;
 }
 
-export type OfficeLayoutSVGData = {
+export type DeskOfficeLayoutSVGData = {
     svgDrawAttribut: SvgRectAttribut;
     deskBookingState: DeskBookingState;
 }
