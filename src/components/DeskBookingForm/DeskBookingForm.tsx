@@ -6,19 +6,18 @@ import { BookingConfirmModal, BookingConfirmationModalData } from '../BookingCon
 import { DeskBooking, DeskBookingState } from '../../shared/models/rest/desk-booking.model';
 import { ErrorHandlerService } from '../../shared/services/ihm/error-handler.service';
 import { OfficeLayoutSVGData } from '../../shared/models/rest/office-layout.model';
+import { SnackbarVariant } from '../../shared/models/ihm/snackbar.model';
+import { useSnackbar } from '../../shared/context/snackbarProvider';
 import { DD_MM_YYYY } from '../../shared/constants/date.constant';
 import { LOCALE } from '../../shared/constants/locale.constant';
-import { HEURE } from '../../shared/constants/label.constant';
+import { FunctionComponent, useEffect, useState } from 'react';
+import { DateHelper } from '../../shared/helpers/date.helper';
+import { Button, Divider, Loading } from '@nextui-org/react';
 import { OfficeLayout } from '../OfficeLayout/OfficeLayout';
 import { Field } from '../../shared/models/ihm/form.model';
-import { FunctionComponent, useEffect, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Button, Loading } from '@nextui-org/react';
 import DatePicker from 'react-datepicker';
 import './DeskBookingForm.css';
-import { useSnackbar } from '../../shared/context/snackbarProvider';
-import { SnackbarVariant } from '../../shared/models/ihm/snackbar.model';
-import { DateHelper } from '../../shared/helpers/date.helper';
 
 type Form = {
   checkInDateTime: Field<Date>;
@@ -121,13 +120,14 @@ export const DeskBookingForm: FunctionComponent = () => {
   };
 
   return (
-    <div className='container'>
+    <div>
       {loading ? (
-        <Loading className='container' color={'secondary'} size='xl' />
+        <Loading className='loader' color={'secondary'} size='xl' />
       ) : (
         <div>
-          <div className='blocForm'>
+          <div className='blockBookingForm'>
             <h2>Rechercher un bureau de disponible</h2>
+            <Divider />
             <form className='form' onSubmit={handleSubmit}>
               <div className='form-group'>
                 <label>Date de début</label>
@@ -149,9 +149,11 @@ export const DeskBookingForm: FunctionComponent = () => {
                   dateFormat={DD_MM_YYYY}
                 />
               </div>
-              <Button type='submit' color={'primary'}>
-                Rechercher
-              </Button>
+              <div className='form-group'>
+                <Button type='submit' color={'primary'}>
+                  Rechercher
+                </Button>
+              </div>
             </form>
           </div>
           <OfficeLayout

@@ -9,9 +9,9 @@ import { FunctionComponent, useEffect, useState } from 'react';
 import { HEURE } from '../../shared/constants/label.constant';
 import { DateHelper } from '../../shared/helpers/date.helper';
 import { OfficeLayout } from '../OfficeLayout2/OfficeLayout';
+import { Button, Divider, Loading } from '@nextui-org/react';
 import { Field } from '../../shared/models/ihm/form.model';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Button, Loading } from '@nextui-org/react';
 import DatePicker from 'react-datepicker';
 import './RoomBookingForm.css';
 
@@ -121,13 +121,14 @@ export const RoomBookingForm: FunctionComponent = () => {
   };
 
   return (
-    <div className='container'>
+    <div>
       {loading ? (
-        <Loading className='container' color={'secondary'} size='xl' />
+        <Loading className='loader' color={'secondary'} size='xl' />
       ) : (
         <div>
-          <div className='blocForm'>
+          <div className='blockBookingForm'>
             <h2>Rechercher une salle disponible</h2>
+            <Divider />
             <form className='form' onSubmit={handleSubmit}>
               <div className='form-group'>
                 <label>Date de début</label>
@@ -156,9 +157,11 @@ export const RoomBookingForm: FunctionComponent = () => {
                   showTimeInput
                 />
               </div>
-              <Button type='submit' color={'primary'}>
-                Rechercher
-              </Button>
+              <div className='form-group'>
+                <Button type='submit' color={'primary'}>
+                  Rechercher
+                </Button>
+              </div>
             </form>
           </div>
           <OfficeLayout

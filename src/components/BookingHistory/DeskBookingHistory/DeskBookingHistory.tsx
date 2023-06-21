@@ -5,7 +5,7 @@ import { DELETE_BOOKING_MODAL } from '../../../shared/constants/modal.constant';
 import { CANCEL, CONFIRM } from '../../../shared/constants/label.constant';
 import { ConfirmModal } from '../../UI/ConfirmModal/ConfirmModal';
 import { FunctionComponent, useEffect, useState } from 'react';
-import { BookingCard } from '../../bookingCard/BookingCard';
+import { BookingCard } from '../../BookingCard/BookingCard';
 import { Grid, Loading } from '@nextui-org/react';
 import './DeskBookingHistory.css';
 

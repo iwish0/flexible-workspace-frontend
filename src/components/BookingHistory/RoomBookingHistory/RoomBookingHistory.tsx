@@ -6,7 +6,7 @@ import { CANCEL, CONFIRM } from '../../../shared/constants/label.constant';
 import { ConfirmModal } from '../../UI/ConfirmModal/ConfirmModal';
 import { DateHelper } from '../../../shared/helpers/date.helper';
 import { FunctionComponent, useEffect, useState } from 'react';
-import { BookingCard } from '../../bookingCard/BookingCard';
+import { BookingCard } from '../../BookingCard/BookingCard';
 import { Grid, Loading } from '@nextui-org/react';
 import './RoomBookingHistory.css';
 
