@@ -2,12 +2,13 @@ import { RoomBookingService } from '../../../shared/services/rest/room-booking.s
 import { ErrorHandlerService } from '../../../shared/services/ihm/error-handler.service';
 import { RoomBookingInfo } from '../../../shared/models/rest/room-booking.model';
 import { DELETE_BOOKING_MODAL } from '../../../shared/constants/modal.constant';
+import { BookingHistoryCard } from '../BookingHistoryCard/BookingHistoryCard';
 import { CANCEL, CONFIRM } from '../../../shared/constants/label.constant';
+import { Card, Grid, Loading, Row, Text } from '@nextui-org/react';
 import { ConfirmModal } from '../../UI/ConfirmModal/ConfirmModal';
 import { DateHelper } from '../../../shared/helpers/date.helper';
 import { FunctionComponent, useEffect, useState } from 'react';
-import { BookingCard } from '../../BookingCard/BookingCard';
-import { Grid, Loading } from '@nextui-org/react';
+import { Calendar } from 'react-iconly';
 import './RoomBookingHistory.css';
 
 type Props = {
@@ -56,13 +57,20 @@ export const RoomBookingHistory: FunctionComponent<Props> = ({ userId }) => {
 
   return (
     <>
-      <h2>Réservation salle</h2>
+      <Card css={{ mb: 25, color: '$secondary' }}>
+        <Card.Body>
+          <Row justify='center' align='center'>
+            <Calendar set='light' size={'large'} />
+            <Text b css={{ fontSize: 20, color: '$secondary', marginLeft: 15 }}>Réservation salle</Text>
+          </Row>
+        </Card.Body>
+      </Card>
       {loading ? (<Loading className='container' color={'secondary'} size='xl' />) : (
         <div>
           <Grid.Container gap={2}>
             {bookings.map(({ bookingInfo, roomInfo }) => (
               <Grid className='grid' key={bookingInfo._id} xs={12} sm={6} md={4} xl={3}>
-                <BookingCard
+                <BookingHistoryCard
                   id={bookingInfo._id || ''}
                   bookingDateCreated={bookingInfo.dateCreated || ''}
                   checkInDate={bookingInfo.checkInDateTime}
