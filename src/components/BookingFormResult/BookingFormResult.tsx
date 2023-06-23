@@ -12,9 +12,9 @@ type Props = {
 
 export const BookingFormResult: FunctionComponent<Props> = ({ data, onSelectItem }) => {
     return (
-        <Grid.Container gap={2} justify='center' >
+        <Grid.Container gap={2}>
             {data.map((s: SearchResultDetail, index: number) => (
-                <Grid key={index} xs={12} sm={6} md={4} xl={3} justify='center'>
+                <Grid key={index} xs={12} sm={6} md={4} xl={3}>
                     <BookingFormResultCard data={s} onSelectItem={onSelectItem}
                     />
                 </Grid>

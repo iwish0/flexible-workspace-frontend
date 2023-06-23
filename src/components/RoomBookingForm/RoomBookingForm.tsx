@@ -1,8 +1,10 @@
 import { BookingConfirmModal, BookingConfirmationModalData } from '../BookingConfirmModal/BookingConfirmModal';
 import { RoomBookingService, SearchRoomCriteria } from '../../shared/services/rest/room-booking.service';
+import { SearchResultDetailService } from '../../shared/services/ihm/search-result-detail.service';
 import { RoomBooking, RoomBookingState } from '../../shared/models/rest/room-booking.model';
 import { RoomOfficeLayoutSVGData } from '../../shared/models/rest/office-layout.model';
 import { ErrorHandlerService } from '../../shared/services/ihm/error-handler.service';
+import { BookingFormResult } from '../BookingFormResult/BookingFormResult';
 import { DD_MM_YYYY } from '../../shared/constants/date.constant';
 import { LOCALE } from '../../shared/constants/locale.constant';
 import { FunctionComponent, useEffect, useState } from 'react';
@@ -55,7 +57,6 @@ export const RoomBookingForm: FunctionComponent = () => {
 
   const onSelectRoom = (roomBookingState: RoomBookingState): void => {
     setSelectedRoom(() => { return { ...roomBookingState } });
-
   };
 
   const closeBookingConfirmModal = (): void => {
@@ -107,14 +108,12 @@ export const RoomBookingForm: FunctionComponent = () => {
 
   const getOfficeLayoutWithDeskBookingsState = async () => {
     setLoading(true);
-
     try {
       const criteria: SearchRoomCriteria = {
         checkInDateTime: form.checkInDateTime.value,
         checkOutDateTime: form.checkOutDateTime.value
       }
-      const result: RoomOfficeLayoutSVGData[] =
-        await RoomBookingService.getOfficeLayoutWithRoomBookingsState(criteria);
+      const result: RoomOfficeLayoutSVGData[] = await RoomBookingService.getOfficeLayoutWithRoomBookingsState(criteria);
       setListOfficeLayoutSVGData(result);
     } finally {
       setLoading(false);
@@ -165,10 +164,11 @@ export const RoomBookingForm: FunctionComponent = () => {
               </div>
             </form>
           </div>
-          <OfficeLayout
+          <BookingFormResult data={SearchResultDetailService.formatRoomsDataToSearchResultData(listOfficeLayoutSVGData)} onSelectItem={onSelectRoom} />
+          {/* <OfficeLayout
             listOfficeLayoutSVGData={listOfficeLayoutSVGData}
             onSelectElement={onSelectRoom}
-          />
+          /> */}
           <BookingConfirmModal
             visible={isBookingConfirmModalVisible}
             onCancel={closeBookingConfirmModal}

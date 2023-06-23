@@ -75,6 +75,8 @@ export const RoomBookingHistory: FunctionComponent<Props> = ({ userId }) => {
                   bookingDateCreated={bookingInfo.dateCreated || ''}
                   checkInDate={bookingInfo.checkInDateTime}
                   checkOutDate={bookingInfo.checkOutDateTime}
+                  checkInTime={DateHelper.getHourAndMinutFromDate(new Date(bookingInfo.checkInDateTime))}
+                  checkoutTime={DateHelper.getHourAndMinutFromDate(new Date(bookingInfo.checkOutDateTime))}
                   comment={bookingInfo.comment}
                   placeName={roomInfo.name}
                   onCancel={openDeleteBookingModal}

@@ -1,5 +1,5 @@
 import { DateHelper } from '../../../shared/helpers/date.helper';
-import { Button, Text, Card } from '@nextui-org/react';
+import { Button, Text, Card, Row } from '@nextui-org/react';
 import { FunctionComponent } from 'react';
 import { Delete } from 'react-iconly';
 import './BookingHistoryCard.css';
@@ -35,22 +35,26 @@ export const BookingHistoryCard: FunctionComponent<Props> = ({
             </Card.Header>
             <Card.Divider />
             <Card.Body css={{ py: '$10' }}>
-                <div className='flex-row'>
+                <Row justify='space-between' align='center'>
                     <Text b>Du</Text>
                     <Text>{DateHelper.formatDate(checkInDate)}</Text>
-                </div>
-                <div className='flex-row'>
+                    {checkInTime && <Text>{checkInTime}</Text>}
+                </Row>
+                <Row justify='space-between' align='center'>
                     <Text b>Au</Text>
                     <Text>{DateHelper.formatDate(checkOutDate)}</Text>
-                </div>
-                <div className='flex-row'>
+                    {checkoutTime && <Text>{checkoutTime}</Text>}
+                </Row>
+                <Row justify='space-between' align='center'>
                     <Text b>Emplacement</Text>
                     <Text>{placeName}</Text>
-                </div>
-                {comment && (<div className='comment'>
-                    <Text b>Commentaire</Text>
-                    <Text>{comment}</Text>
-                </div>)}
+                </Row>
+                {comment && (
+                    <Row justify='space-between' align='center'>
+                        <Text b>Commentaire</Text>
+                        <Text>{comment}</Text>
+                    </Row>
+                )}
             </Card.Body>
             <Card.Divider />
             <Card.Footer>

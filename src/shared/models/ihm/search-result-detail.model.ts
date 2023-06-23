@@ -12,5 +12,6 @@ export type SearchResultDetail = {
     checkInTime: string | null;
     checkOutTime: string | null;
     maxCapacity: number | null;
+    description: string | null;
     bookingState: DeskBookingState | RoomBookingState
 }
