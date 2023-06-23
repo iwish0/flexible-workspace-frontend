@@ -1,0 +1,17 @@
+.tooltip {
+    background: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    width: 15rem;
+    height: 15rem;
+    position: absolute;
+}
+
+.show {
+    display: block;
+}
+
+.hide {
+    display: none;
+}

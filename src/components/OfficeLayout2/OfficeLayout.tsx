@@ -1,46 +1,47 @@
 /* eslint-disable react/no-unknown-property */
 import {
-  OfficeLayoutProps,
+  OfficeLayoutToolTipProps,
   OfficeLayoutTooltip
-} from '../UI/OfficeLayoutTooltip/OfficeLayoutTooltip';
-import { DeskOfficeLayoutSVGData } from '../../shared/models/rest/office-layout.model';
-import { DeskBookingState } from '../../shared/models/rest/desk-booking.model';
+} from '../UI/OfficeLayoutTooltip2/OfficeLayoutTooltip';
+import { RoomOfficeLayoutSVGData } from '../../shared/models/rest/office-layout.model';
 import React, { FunctionComponent, useState } from 'react';
 import './OfficeLayout.css';
+import { RoomBookingState } from '../../shared/models/rest/room-booking.model';
 
 type Props = {
-  listOfficeLayoutSVGData: DeskOfficeLayoutSVGData[];
-  onSelectDesk: (deskBookingState: DeskBookingState) => void;
+  listOfficeLayoutSVGData: RoomOfficeLayoutSVGData[];
+  onSelectElement: (bookingState: RoomBookingState) => void;
 };
 export const OfficeLayout: FunctionComponent<Props> = ({
   listOfficeLayoutSVGData,
-  onSelectDesk
+  onSelectElement
 }) => {
-  const [officeLayoutTooltipProps, setOfficeLayoutTooltipProps] = useState<OfficeLayoutProps>({
-    deskBookingState: null,
+  const [officeLayoutTooltipProps, setOfficeLayoutTooltipProps] = useState<OfficeLayoutToolTipProps>({
+    userName: '',
     isVisible: false,
     position: { top: 0, left: 0 }
   });
 
   const handleClick = (e: React.MouseEvent<SVGElement>) => {
-    const deskName: string = e.currentTarget.id;
-    const officeLayoutSGVData: DeskOfficeLayoutSVGData | undefined = listOfficeLayoutSVGData.find(
-      ({ svgDrawAttribut }) => svgDrawAttribut.id === deskName
+    const objectName: string = e.currentTarget.id;
+    const officeLayoutSGVData: RoomOfficeLayoutSVGData | undefined = listOfficeLayoutSVGData.find(
+      ({ svgDrawAttribut }) => svgDrawAttribut.id === objectName
     );
-    if (officeLayoutSGVData && !officeLayoutSGVData.deskBookingState.isBooked) {
-      onSelectDesk(officeLayoutSGVData.deskBookingState);
+    if (officeLayoutSGVData && !officeLayoutSGVData.roomBookingState.isBooked) {
+      onSelectElement(officeLayoutSGVData.roomBookingState);
     }
   };
 
   const showBookingDetail = (e: React.MouseEvent<SVGElement>) => {
     const deskName: string = e.currentTarget.id;
-    const officeLayoutSGVData: DeskOfficeLayoutSVGData | undefined = listOfficeLayoutSVGData.find(
+    const officeLayoutSGVData: RoomOfficeLayoutSVGData | undefined = listOfficeLayoutSVGData.find(
       ({ svgDrawAttribut }) => svgDrawAttribut.id === deskName
     );
-    if (officeLayoutSGVData && officeLayoutSGVData.deskBookingState.isBooked) {
-      const { deskBookingState } = officeLayoutSGVData;
+    if (officeLayoutSGVData && officeLayoutSGVData.roomBookingState && officeLayoutSGVData.roomBookingState.isBooked) {
+      const { roomBookingState } = officeLayoutSGVData;
+      const { bookingInfo } = roomBookingState;
       setOfficeLayoutTooltipProps({
-        deskBookingState,
+        userName: bookingInfo.user.name,
         isVisible: true,
         position: { left: e.pageX, top: e.pageY }
       });
@@ -69,11 +70,11 @@ export const OfficeLayout: FunctionComponent<Props> = ({
             x='-17'
             y='-7'
           />
-          {listOfficeLayoutSVGData.map(({ deskBookingState, svgDrawAttribut }) => (
+          {listOfficeLayoutSVGData.map(({ roomBookingState, svgDrawAttribut }) => (
             <rect
               key={svgDrawAttribut.id}
               onClick={handleClick}
-              className={'rect ' + (deskBookingState?.isBooked ? 'red' : 'green')}
+              className={'rect ' + (roomBookingState?.isBooked ? 'red' : 'green')}
               height={svgDrawAttribut.height}
               id={svgDrawAttribut.id}
               width={svgDrawAttribut.width}

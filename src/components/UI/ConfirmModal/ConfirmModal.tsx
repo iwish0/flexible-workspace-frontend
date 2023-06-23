@@ -27,6 +27,7 @@ export const ConfirmModal: FunctionComponent<Props> = ({
             aria-labelledby="modal-title"
             open={visible}
             onClose={onCancel}
+            animated={false}
         >
             <Modal.Header>
                 <Text id="modal-title" size={18}>
