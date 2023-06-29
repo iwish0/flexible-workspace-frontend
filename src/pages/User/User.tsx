@@ -6,9 +6,8 @@ export const User: FunctionComponent = () => {
     const [userId] = useState<number>(123456789);
 
     return (
-        <>
-            <h2>Espace utilisateur</h2>
+        <div className='page-content'>
             <Outlet context={{ userId }} />
-        </>
-    )
+        </div>
+    );
 }

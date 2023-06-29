@@ -41,3 +41,24 @@ code {
 .blockBookingForm h2 {
   font-size: 1.2rem;
 }
+
+
+/* date picker overwrite based style */
+.react-datepicker__header {
+  background-color: white;
+}
+
+.react-datepicker__month-container {
+  padding: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.react-datepicker__day--selected {
+  background-color: #dd1273;
+  color: #fff;
+}
+
+.react-datepicker__day--selected:hover {
+  background-color: #F0F0F0;
+  color: black;
+}

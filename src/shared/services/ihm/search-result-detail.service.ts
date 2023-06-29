@@ -17,6 +17,7 @@ export class SearchResultDetailService {
                 checkInTime: null,
                 checkOutTime: null,
                 maxCapacity: null,
+                description: null,
                 bookingState: deskBookingState
             };
         })
@@ -35,8 +36,9 @@ export class SearchResultDetailService {
                 checkoutDate: isBooked ? DateHelper.formatDate(bookingInfo.checkOutDateTime) : null,
                 checkInTime: isBooked ? DateHelper.getHourAndMinutFromDate(new Date(bookingInfo.checkInDateTime)) : null,
                 checkOutTime: isBooked ? DateHelper.getHourAndMinutFromDate(new Date(bookingInfo.checkOutDateTime)) : null,
+                description: roomInfo.description,
                 bookingState: roomBookingState
             };
-        })
+        });
     }
 }

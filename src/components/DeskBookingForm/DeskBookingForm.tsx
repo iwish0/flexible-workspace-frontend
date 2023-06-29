@@ -157,11 +157,11 @@ export const DeskBookingForm: FunctionComponent = () => {
             </form>
           </div>
           <BookingFormResult data={SearchResultDetailService.formatDesksDataToSearchResultData(listOfficeLayoutSVGData)} onSelectItem={onSelectDesk} />
-
+{/* 
           <OfficeLayout
             listOfficeLayoutSVGData={listOfficeLayoutSVGData}
             onSelectDesk={onSelectDesk}
-          />
+          /> */}
           <BookingConfirmModal
             visible={isBookingConfirmModalVisible}
             onCancel={closeBookingConfirmModal}
