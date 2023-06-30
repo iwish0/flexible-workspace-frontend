@@ -72,7 +72,7 @@ export const Navbar: FunctionComponent<Props> = ({ isAuthenticated }) => {
                                     {longLabel}
                                 </Link>
                             </NavBarNextUI.CollapseItem>))}
-                        <NavBarNextUI.CollapseItem css={{ flex: 1 }}>
+                        <NavBarNextUI.CollapseItem>
                             <SignOutButton />
                         </NavBarNextUI.CollapseItem>
                     </NavBarNextUI.Collapse>
