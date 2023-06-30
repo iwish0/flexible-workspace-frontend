@@ -10,9 +10,7 @@ import { FunctionComponent, useEffect, useState } from 'react';
 import { Calendar } from 'react-iconly';
 import './DeskBookingHistory.css';
 
-type Props = {
-  userId: number;
-}
+type Props = { userId: string; }
 
 export const DeskBookingHistory: FunctionComponent<Props> = ({ userId }) => {
   const [bookings, setBookings] = useState<DeskBookingInfo[]>([]);

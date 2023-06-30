@@ -20,7 +20,7 @@ export class DeskBookingService {
         return result.data;
     }
 
-    public static async getDeskBookingHistoryByUserId(userId: number): Promise<DeskBookingInfo[]> {
+    public static async getDeskBookingHistoryByUserId(userId: string): Promise<DeskBookingInfo[]> {
         const result: AxiosResponse<DeskBookingInfo[]> = await axios.get<DeskBookingInfo[]>(`${DeskBookingsUrl.BASE_URL}/${userId}`);
         return result.data;
     }

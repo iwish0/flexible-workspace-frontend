@@ -1,5 +1,5 @@
-import { Button } from '@nextui-org/react';
 import { useMsal } from '@azure/msal-react';
+import { Button } from '@nextui-org/react';
 import { FunctionComponent } from 'react';
 import { Link } from 'react-router-dom';
 

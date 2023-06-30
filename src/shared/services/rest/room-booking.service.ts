@@ -20,7 +20,7 @@ export class RoomBookingService {
         return result.data;
     }
 
-    public static async getRoomBookingHistoryByUserId(userId: number): Promise<RoomBookingInfo[]> {
+    public static async getRoomBookingHistoryByUserId(userId: string): Promise<RoomBookingInfo[]> {
         const result: AxiosResponse<RoomBookingInfo[]> = await axios.get<RoomBookingInfo[]>(`${RoomBookingsUrl.BASE_URL}/${userId}`);
         return result.data;
     }

@@ -14,6 +14,7 @@ import { OfficeLayout } from '../OfficeLayout2/OfficeLayout';
 import { Button, Divider, Loading } from '@nextui-org/react';
 import { Field } from '../../shared/models/ihm/form.model';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useMsal } from '@azure/msal-react';
 import DatePicker from 'react-datepicker';
 import './RoomBookingForm.css';
 
@@ -23,6 +24,7 @@ type Form = {
 };
 
 export const RoomBookingForm: FunctionComponent = () => {
+  const { accounts } = useMsal();
   const [form, setForm] = useState<Form>({
     checkInDateTime: { value: new Date(), isValid: true },
     checkOutDateTime: { value: new Date(), isValid: true }
@@ -69,9 +71,9 @@ export const RoomBookingForm: FunctionComponent = () => {
     if (selectedRoom) {
       const roomBooking: RoomBooking = {
         user: {
-          email: 'c.bresson@proxiad.com',
-          id: 123456789,
-          name: 'John DOE'
+          email: accounts[0].username,
+          id: accounts[0].localAccountId,
+          name: accounts[0].name || ''
         },
         comment,
         checkInDateTime: selectedRoom.searchCriteria.checkInDateTime,
@@ -139,7 +141,7 @@ export const RoomBookingForm: FunctionComponent = () => {
                   locale={LOCALE}
                   dateFormat={DD_MM_YYYY}
                   timeCaption={HEURE}
-                  showTimeSelect={false}
+                  showTimeSelect
                   timeIntervals={15}
                 />
               </div>
@@ -154,7 +156,6 @@ export const RoomBookingForm: FunctionComponent = () => {
                   timeCaption={HEURE}
                   showTimeSelect
                   timeIntervals={15}
-                  showTimeInput
                 />
               </div>
               <div className='form-group'>
