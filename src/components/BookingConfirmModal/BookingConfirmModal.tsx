@@ -30,7 +30,6 @@ export const BookingConfirmModal: FunctionComponent<Props> = (
         setComment(comment);
     };
     const { checkInDate, checkOutDate, placeName, checkInTime, checkOutTime } = bookingConfirmationModalData;
-    console.log('placeName', placeName)
     return (
         <Modal
             closeButton
