@@ -13,6 +13,7 @@ import { DateHelper } from '../../shared/helpers/date.helper';
 import { OfficeLayout } from '../OfficeLayout2/OfficeLayout';
 import { Button, Divider, Loading } from '@nextui-org/react';
 import { Field } from '../../shared/models/ihm/form.model';
+import { defaultLoginRequest } from '../../authConfig';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useMsal } from '@azure/msal-react';
 import DatePicker from 'react-datepicker';
@@ -24,7 +25,7 @@ type Form = {
 };
 
 export const RoomBookingForm: FunctionComponent = () => {
-  const { accounts } = useMsal();
+  const { instance, accounts } = useMsal();
   const [form, setForm] = useState<Form>({
     checkInDateTime: { value: new Date(), isValid: true },
     checkOutDateTime: { value: new Date(), isValid: true }
@@ -81,7 +82,8 @@ export const RoomBookingForm: FunctionComponent = () => {
         roomId: selectedRoom.roomInfo._id
       };
       try {
-        await RoomBookingService.create(roomBooking);
+        const token: string = (await instance.acquireTokenSilent({ ...defaultLoginRequest, account: accounts[0] }))?.accessToken;
+        await RoomBookingService.create(roomBooking, token);
         getOfficeLayoutWithDeskBookingsState();
       } catch (error: any) {
         ErrorHandlerService.handleError(error);
@@ -108,16 +110,20 @@ export const RoomBookingForm: FunctionComponent = () => {
     getOfficeLayoutWithDeskBookingsState();
   }
 
-  const getOfficeLayoutWithDeskBookingsState = async () => {
+  const getOfficeLayoutWithDeskBookingsState = async (): Promise<void> => {
     setLoading(true);
     try {
       const criteria: SearchRoomCriteria = {
         checkInDateTime: form.checkInDateTime.value,
         checkOutDateTime: form.checkOutDateTime.value
       }
-      const result: RoomOfficeLayoutSVGData[] = await RoomBookingService.getOfficeLayoutWithRoomBookingsState(criteria);
+      const token: string = (await instance.acquireTokenSilent({ ...defaultLoginRequest, account: accounts[0] }))?.accessToken;
+      const result: RoomOfficeLayoutSVGData[] = await RoomBookingService.getOfficeLayoutWithRoomBookingsState(criteria, token);
       setListOfficeLayoutSVGData(result);
-    } finally {
+    } catch (e: any) {
+      ErrorHandlerService.handleError(e);
+    }
+    finally {
       setLoading(false);
     }
   };

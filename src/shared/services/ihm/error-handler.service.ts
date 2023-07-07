@@ -3,7 +3,7 @@ import { LogService } from "./log.service";
 export class ErrorHandlerService {
 
     public static handleError(e: Error) {
-        this.notify(e);
+        ErrorHandlerService.notify(e);
         LogService.logError(e.message);
     }
 

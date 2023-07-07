@@ -7,25 +7,28 @@ import { CANCEL, CONFIRM } from '../../../shared/constants/label.constant';
 import { Card, Grid, Loading, Row, Text } from '@nextui-org/react';
 import { ConfirmModal } from '../../UI/ConfirmModal/ConfirmModal';
 import { FunctionComponent, useEffect, useState } from 'react';
+import { defaultLoginRequest } from '../../../authConfig';
+import { useMsal } from '@azure/msal-react';
 import { Calendar } from 'react-iconly';
 import './DeskBookingHistory.css';
 
-type Props = { userId: string; }
-
-export const DeskBookingHistory: FunctionComponent<Props> = ({ userId }) => {
+export const DeskBookingHistory: FunctionComponent = () => {
+  const { instance, accounts } = useMsal();
   const [bookings, setBookings] = useState<DeskBookingInfo[]>([]);
   const [bookingId, setBookingId] = useState<string>('');
   const [deleteBookingConfirmModalVisible, setDeleteBookingConfirmModalVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    getBookingHistory().finally(() => setLoading(false));
-  }, [userId]);
+  useEffect(() => { getBookingHistory().finally(() => setLoading(false)) }, []);
 
-  const getBookingHistory = (): Promise<void> => {
-    return DeskBookingService.getDeskBookingHistoryByUserId(userId)
-      .then((bookings: DeskBookingInfo[]) => setBookings(bookings))
-      .catch(ErrorHandlerService.handleError);
+  const getBookingHistory = async (): Promise<void> => {
+    try {
+      const token: string = (await instance.acquireTokenSilent({ ...defaultLoginRequest, account: accounts[0] }))?.accessToken;
+      const bookings: DeskBookingInfo[] = await DeskBookingService.getDeskBookingHistoryByUserId(accounts[0].localAccountId, token)
+      setBookings(bookings);
+    } catch (e: any) {
+      ErrorHandlerService.handleError(e)
+    }
   }
 
   const closeDeleteBookingModal = (): void => {
@@ -37,18 +40,19 @@ export const DeskBookingHistory: FunctionComponent<Props> = ({ userId }) => {
     setDeleteBookingConfirmModalVisible(true);
   }
 
-  const onConfirmDeleteBooking = (): void => {
-    setDeleteBookingConfirmModalVisible(false);
-    setLoading(true);
-    if (bookingId) {
-      DeskBookingService.delete(bookingId)
-        .then(() => {
-          getBookingHistory();
-        })
-        .catch(ErrorHandlerService.handleError)
-        .finally(() => {
-          setLoading(false);
-        });
+  const onConfirmDeleteBooking = async (): Promise<void> => {
+    try {
+      setDeleteBookingConfirmModalVisible(false);
+      setLoading(true);
+      if (bookingId) {
+        const token: string = (await instance.acquireTokenSilent({ ...defaultLoginRequest, account: accounts[0] }))?.accessToken;
+        await DeskBookingService.delete(bookingId, token);
+        await getBookingHistory();
+      }
+    } catch (e: any) {
+      ErrorHandlerService.handleError(e);
+    } finally {
+      setLoading(false);
     }
   }
 

@@ -7,9 +7,9 @@ import { LogLevel, Configuration } from '@azure/msal-browser';
  */
 export const msalConfig: Configuration = {
     auth: {
-        clientId: '5918c30e-1dd0-4b97-8738-04406c4ecfd6',
-        authority: 'https://login.microsoftonline.com/fc2be715-4a94-42dd-832d-9d7dbb73c754',
-        redirectUri: 'http://localhost:3000/desk-booking',
+        clientId: process.env.REACT_APP_CLIENT_ID || '',
+        authority: process.env.REACT_APP_AUTHORITY,
+        redirectUri: process.env.REACT_APP_REDIRECT_URL
     },
     cache: {
         cacheLocation: 'sessionStorage', // This configures where your cache will be stored
@@ -50,6 +50,10 @@ export const msalConfig: Configuration = {
  */
 export const loginRequest = {
     scopes: ['User.Read']
+};
+
+export const defaultLoginRequest = {
+    scopes: [`${process.env.REACT_APP_CLIENT_ID}/.default`]
 };
 
 /**

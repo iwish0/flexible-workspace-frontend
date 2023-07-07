@@ -17,6 +17,7 @@ import { FunctionComponent, useEffect, useState } from 'react';
 import { DateHelper } from '../../shared/helpers/date.helper';
 import { OfficeLayout } from '../OfficeLayout/OfficeLayout';
 import { Field } from '../../shared/models/ihm/form.model';
+import { defaultLoginRequest } from '../../authConfig';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useMsal } from '@azure/msal-react';
 import DatePicker from 'react-datepicker';
@@ -29,7 +30,7 @@ type Form = {
 
 export const DeskBookingForm: FunctionComponent = () => {
   const addSnackbar = useSnackbar();
-  const { accounts } = useMsal();
+  const { instance, accounts } = useMsal();
   const [form, setForm] = useState<Form>({
     checkInDateTime: { value: new Date(), isValid: true },
     checkOutDateTime: { value: new Date(), isValid: true }
@@ -79,7 +80,8 @@ export const DeskBookingForm: FunctionComponent = () => {
         deskId: selectedDesk.deskInfo._id
       };
       try {
-        await DeskBookingService.create(deskBooking);
+        const token: string = (await instance.acquireTokenSilent({ ...defaultLoginRequest, account: accounts[0] }))?.accessToken;
+        await DeskBookingService.create(deskBooking, token);
         getOfficeLayoutWithDeskBookingsState();
       } catch (error: any) {
         ErrorHandlerService.handleError(error);
@@ -106,15 +108,15 @@ export const DeskBookingForm: FunctionComponent = () => {
     getOfficeLayoutWithDeskBookingsState();
   }
 
-  const getOfficeLayoutWithDeskBookingsState = async () => {
+  const getOfficeLayoutWithDeskBookingsState = async (): Promise<void> => {
     setLoading(true);
     try {
       const criteria: SearchDeskCriteria = {
         checkInDateTime: form.checkInDateTime.value,
         checkOutDateTime: form.checkOutDateTime.value
       }
-      const result: DeskOfficeLayoutSVGData[] =
-        await DeskBookingService.getOfficeLayoutWithDeskBookingsState(criteria);
+      const token: string = (await instance.acquireTokenSilent({ ...defaultLoginRequest, account: accounts[0] }))?.accessToken;
+      const result: DeskOfficeLayoutSVGData[] = await DeskBookingService.getOfficeLayoutWithDeskBookingsState(criteria, token);
       setListOfficeLayoutSVGData(result);
     } finally {
       setLoading(false);
