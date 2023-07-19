@@ -85,7 +85,7 @@ export const BookingFormResultCard: FunctionComponent<Props> = ({ data: {
             </Card.Body>
             <Card.Divider />
             <Card.Footer>
-                <Button rounded disabled={isBooked} style={{ flex: 1 }} onClick={() => onSelectItem(bookingState)}>Réserver</Button>
+                <Button rounded ghost disabled={isBooked} style={{ flex: 1 }} onClick={() => onSelectItem(bookingState)}>Réserver</Button>
             </Card.Footer>
         </Card>
     );

@@ -10,7 +10,7 @@ import { DeskOfficeLayoutSVGData } from '../../shared/models/rest/office-layout.
 import { BookingFormResult } from '../BookingFormResult/BookingFormResult';
 import { SnackbarVariant } from '../../shared/models/ihm/snackbar.model';
 import { useSnackbar } from '../../shared/context/snackbarProvider';
-import { Button, Divider, Loading } from '@nextui-org/react';
+import { Button, Loading } from '@nextui-org/react';
 import { DD_MM_YYYY } from '../../shared/constants/date.constant';
 import { LOCALE } from '../../shared/constants/locale.constant';
 import { FunctionComponent, useEffect, useState } from 'react';
