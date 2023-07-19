@@ -1,6 +1,5 @@
 import { Modal, Button, Text, Divider } from '@nextui-org/react';
 import { FunctionComponent } from 'react';
-import './ConfirmModal.css';
 
 type Props = {
     title: string;
@@ -24,13 +23,13 @@ export const ConfirmModal: FunctionComponent<Props> = ({
     return (
         <Modal
             closeButton
-            aria-labelledby="modal-title"
+            aria-labelledby='modal-title'
             open={visible}
             onClose={onCancel}
             animated={false}
         >
             <Modal.Header>
-                <Text css={{ color: '$secondary' }} id="modal-title" size={18}>
+                <Text css={{ color: '$secondary' }} id='modal-title' size={18}>
                     {title}
                 </Text>
             </Modal.Header>
@@ -39,7 +38,7 @@ export const ConfirmModal: FunctionComponent<Props> = ({
                 <Text>{bodyContent}</Text>
             </Modal.Body>
             <Modal.Footer>
-                <Button auto flat color="error" onPress={onCancel}>
+                <Button auto flat color='error' onPress={onCancel}>
                     {btnCancelLabel}
                 </Button>
                 <Button auto onPress={onConfirm}>

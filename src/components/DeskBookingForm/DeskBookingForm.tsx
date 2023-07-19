@@ -5,12 +5,11 @@ import {
 import { BookingConfirmModal, BookingConfirmationModalData } from '../BookingConfirmModal/BookingConfirmModal';
 import { SearchResultDetailService } from '../../shared/services/ihm/search-result-detail.service';
 import { DeskBooking, DeskBookingState } from '../../shared/models/rest/desk-booking.model';
-import { ErrorHandlerService } from '../../shared/services/ihm/error-handler.service';
 import { DeskOfficeLayoutSVGData } from '../../shared/models/rest/office-layout.model';
 import { BookingFormResult } from '../BookingFormResult/BookingFormResult';
+import { ErrorNotifyModal } from '../UI/ErrorNotifyModal/ErrorNotifyModal';
 import { SnackbarVariant } from '../../shared/models/ihm/snackbar.model';
 import { useSnackbar } from '../../shared/context/snackbarProvider';
-import { Button, Loading } from '@nextui-org/react';
 import { DD_MM_YYYY } from '../../shared/constants/date.constant';
 import { LOCALE } from '../../shared/constants/locale.constant';
 import { FunctionComponent, useEffect, useState } from 'react';
@@ -19,6 +18,7 @@ import { OfficeLayout } from '../OfficeLayout/OfficeLayout';
 import { Field } from '../../shared/models/ihm/form.model';
 import { defaultLoginRequest } from '../../authConfig';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Button, Loading } from '@nextui-org/react';
 import { useMsal } from '@azure/msal-react';
 import DatePicker from 'react-datepicker';
 import './DeskBookingForm.css';
@@ -35,6 +35,7 @@ export const DeskBookingForm: FunctionComponent = () => {
     checkInDateTime: { value: new Date(), isValid: true },
     checkOutDateTime: { value: new Date(), isValid: true }
   });
+  const [error, setError] = useState<Error | null>(null);
 
   const [listOfficeLayoutSVGData, setListOfficeLayoutSVGData] = useState<DeskOfficeLayoutSVGData[]>([]);
   const [isBookingConfirmModalVisible, setIsBookingConfirmModalVisible] = useState<boolean>(false);
@@ -55,6 +56,10 @@ export const DeskBookingForm: FunctionComponent = () => {
       setIsBookingConfirmModalVisible(true);
     }
   }, [selectedDesk]);
+
+  const onCloseErrorNotifyModal = (): void => {
+    setError(null);
+  }
 
   const onSelectDesk = (deskBookingState: DeskBookingState): void => {
     setSelectedDesk(() => { return { ...deskBookingState } });
@@ -83,8 +88,8 @@ export const DeskBookingForm: FunctionComponent = () => {
         const token: string = (await instance.acquireTokenSilent({ ...defaultLoginRequest, account: accounts[0] }))?.accessToken;
         await DeskBookingService.create(deskBooking, token);
         getOfficeLayoutWithDeskBookingsState();
-      } catch (error: any) {
-        ErrorHandlerService.handleError(error);
+      } catch (error: unknown) {
+        setError(error as Error);
       } finally {
         setLoading(false);
       }
@@ -110,6 +115,7 @@ export const DeskBookingForm: FunctionComponent = () => {
 
   const getOfficeLayoutWithDeskBookingsState = async (): Promise<void> => {
     setLoading(true);
+    setListOfficeLayoutSVGData([]);
     try {
       const criteria: SearchDeskCriteria = {
         checkInDateTime: form.checkInDateTime.value,
@@ -118,6 +124,8 @@ export const DeskBookingForm: FunctionComponent = () => {
       const token: string = (await instance.acquireTokenSilent({ ...defaultLoginRequest, account: accounts[0] }))?.accessToken;
       const result: DeskOfficeLayoutSVGData[] = await DeskBookingService.getOfficeLayoutWithDeskBookingsState(criteria, token);
       setListOfficeLayoutSVGData(result);
+    } catch (error: unknown) {
+      setError(error as Error);
     } finally {
       setLoading(false);
     }
@@ -125,6 +133,7 @@ export const DeskBookingForm: FunctionComponent = () => {
 
   return (
     <div>
+      <ErrorNotifyModal error={error as Error} onClose={onCloseErrorNotifyModal} visible={!!error} />
       {loading ? (
         <Loading className='loader' color={'secondary'} size='xl' />
       ) : (

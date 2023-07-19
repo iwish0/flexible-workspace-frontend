@@ -1,8 +1,8 @@
 import { RoomBookingService } from '../../../shared/services/rest/room-booking.service';
-import { ErrorHandlerService } from '../../../shared/services/ihm/error-handler.service';
 import { RoomBookingInfo } from '../../../shared/models/rest/room-booking.model';
 import { DELETE_BOOKING_MODAL } from '../../../shared/constants/modal.constant';
 import { BookingHistoryCard } from '../BookingHistoryCard/BookingHistoryCard';
+import { ErrorNotifyModal } from '../../UI/ErrorNotifyModal/ErrorNotifyModal';
 import { CANCEL, CONFIRM } from '../../../shared/constants/label.constant';
 import { Card, Grid, Loading, Row, Text } from '@nextui-org/react';
 import { ConfirmModal } from '../../UI/ConfirmModal/ConfirmModal';
@@ -15,6 +15,7 @@ import './RoomBookingHistory.css';
 
 export const RoomBookingHistory: FunctionComponent = () => {
   const { instance, accounts } = useMsal();
+  const [error, setError] = useState<Error | null>(null);
   const [bookings, setBookings] = useState<RoomBookingInfo[]>([]);
   const [bookingId, setBookingId] = useState<string>('');
   const [deleteBookingConfirmModalVisible, setDeleteBookingConfirmModalVisible] = useState<boolean>(false);
@@ -27,13 +28,17 @@ export const RoomBookingHistory: FunctionComponent = () => {
       const token: string = (await instance.acquireTokenSilent({ ...defaultLoginRequest, account: accounts[0] }))?.accessToken;
       const bookings: RoomBookingInfo[] = await RoomBookingService.getRoomBookingHistoryByUserId(accounts[0].localAccountId, token);
       setBookings(bookings);
-    } catch (e: any) {
-      ErrorHandlerService.handleError(e);
+    } catch (error: unknown) {
+      setError(error as Error);
     }
   }
 
   const closeDeleteBookingModal = (): void => {
     setDeleteBookingConfirmModalVisible(false)
+  }
+
+  const CloseErrorNotifyModal = (): void => {
+    setError(null);
   }
 
   const openDeleteBookingModal = (bookingId: string): void => {
@@ -50,8 +55,8 @@ export const RoomBookingHistory: FunctionComponent = () => {
         await RoomBookingService.delete(bookingId, token);
         await getBookingHistory();
       }
-    } catch (e: any) {
-      ErrorHandlerService.handleError(e);
+    } catch (error: unknown) {
+      setError(error as Error)
     } finally {
       setLoading(false);
     }
@@ -59,6 +64,7 @@ export const RoomBookingHistory: FunctionComponent = () => {
 
   return (
     <>
+      <ErrorNotifyModal error={error as Error} onClose={CloseErrorNotifyModal} visible={!!error} />
       <Card css={{ mb: 25, color: '$secondary' }}>
         <Card.Body>
           <Row justify='center' align='center'>

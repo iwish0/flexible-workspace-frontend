@@ -3,17 +3,17 @@ import { RoomBookingService, SearchRoomCriteria } from '../../shared/services/re
 import { SearchResultDetailService } from '../../shared/services/ihm/search-result-detail.service';
 import { RoomBooking, RoomBookingState } from '../../shared/models/rest/room-booking.model';
 import { RoomOfficeLayoutSVGData } from '../../shared/models/rest/office-layout.model';
-import { ErrorHandlerService } from '../../shared/services/ihm/error-handler.service';
 import { BookingFormResult } from '../BookingFormResult/BookingFormResult';
+import { ErrorNotifyModal } from '../UI/ErrorNotifyModal/ErrorNotifyModal';
 import { DD_MM_YYYY } from '../../shared/constants/date.constant';
 import { LOCALE } from '../../shared/constants/locale.constant';
 import { FunctionComponent, useEffect, useState } from 'react';
 import { HEURE } from '../../shared/constants/label.constant';
 import { DateHelper } from '../../shared/helpers/date.helper';
 import { OfficeLayout } from '../OfficeLayout2/OfficeLayout';
-import { Button, Divider, Loading } from '@nextui-org/react';
 import { Field } from '../../shared/models/ihm/form.model';
 import { defaultLoginRequest } from '../../authConfig';
+import { Button, Loading } from '@nextui-org/react';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useMsal } from '@azure/msal-react';
 import DatePicker from 'react-datepicker';
@@ -44,6 +44,7 @@ export const RoomBookingForm: FunctionComponent = () => {
     });
   const [selectedRoom, setSelectedRoom] = useState<RoomBookingState | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     if (selectedRoom) {
@@ -85,8 +86,8 @@ export const RoomBookingForm: FunctionComponent = () => {
         const token: string = (await instance.acquireTokenSilent({ ...defaultLoginRequest, account: accounts[0] }))?.accessToken;
         await RoomBookingService.create(roomBooking, token);
         getOfficeLayoutWithDeskBookingsState();
-      } catch (error: any) {
-        ErrorHandlerService.handleError(error);
+      } catch (error: unknown) {
+        setError(error as Error);
       } finally {
         setLoading(false);
       }
@@ -120,16 +121,21 @@ export const RoomBookingForm: FunctionComponent = () => {
       const token: string = (await instance.acquireTokenSilent({ ...defaultLoginRequest, account: accounts[0] }))?.accessToken;
       const result: RoomOfficeLayoutSVGData[] = await RoomBookingService.getOfficeLayoutWithRoomBookingsState(criteria, token);
       setListOfficeLayoutSVGData(result);
-    } catch (e: any) {
-      ErrorHandlerService.handleError(e);
+    } catch (error: unknown) {
+      setError(error as Error)
     }
     finally {
       setLoading(false);
     }
   };
 
+  const onCloseErrorNotifyModal = (): void => {
+    setError(null);
+  }
+
   return (
     <div>
+      <ErrorNotifyModal error={error as Error} onClose={onCloseErrorNotifyModal} visible={!!error} />
       {loading ? (
         <Loading className='loader' color={'secondary'} size='xl' />
       ) : (

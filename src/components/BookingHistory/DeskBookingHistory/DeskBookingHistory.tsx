@@ -1,9 +1,9 @@
 import { DeskBookingService } from '../../../shared/services/rest/desk-booking.service';
-import { ErrorHandlerService } from '../../../shared/services/ihm/error-handler.service';
 import { DeskBookingInfo } from '../../../shared/models/rest/desk-booking.model';
 import { DELETE_BOOKING_MODAL } from '../../../shared/constants/modal.constant';
 import { BookingHistoryCard } from '../BookingHistoryCard/BookingHistoryCard';
 import { CANCEL, CONFIRM } from '../../../shared/constants/label.constant';
+import { ErrorNotifyModal } from '../../UI/ErrorNotifyModal/ErrorNotifyModal';
 import { Card, Grid, Loading, Row, Text } from '@nextui-org/react';
 import { ConfirmModal } from '../../UI/ConfirmModal/ConfirmModal';
 import { FunctionComponent, useEffect, useState } from 'react';
@@ -14,25 +14,32 @@ import './DeskBookingHistory.css';
 
 export const DeskBookingHistory: FunctionComponent = () => {
   const { instance, accounts } = useMsal();
+  const [error, setError] = useState<Error | null>(null);
   const [bookings, setBookings] = useState<DeskBookingInfo[]>([]);
   const [bookingId, setBookingId] = useState<string>('');
   const [deleteBookingConfirmModalVisible, setDeleteBookingConfirmModalVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => { getBookingHistory().finally(() => setLoading(false)) }, []);
+  useEffect(() => { getBookingHistory(); }, []);
 
   const getBookingHistory = async (): Promise<void> => {
     try {
       const token: string = (await instance.acquireTokenSilent({ ...defaultLoginRequest, account: accounts[0] }))?.accessToken;
       const bookings: DeskBookingInfo[] = await DeskBookingService.getDeskBookingHistoryByUserId(accounts[0].localAccountId, token)
       setBookings(bookings);
-    } catch (e: any) {
-      ErrorHandlerService.handleError(e)
+    } catch (error: unknown) {
+      setError(error as Error);
+    } finally {
+      setLoading(false)
     }
   }
 
   const closeDeleteBookingModal = (): void => {
     setDeleteBookingConfirmModalVisible(false)
+  }
+
+  const CloseErrorNotifyModal = (): void => {
+    setError(null);
   }
 
   const openDeleteBookingModal = (bookingId: string): void => {
@@ -49,8 +56,8 @@ export const DeskBookingHistory: FunctionComponent = () => {
         await DeskBookingService.delete(bookingId, token);
         await getBookingHistory();
       }
-    } catch (e: any) {
-      ErrorHandlerService.handleError(e);
+    } catch (e: unknown) {
+      setError(error as Error)
     } finally {
       setLoading(false);
     }
@@ -58,6 +65,7 @@ export const DeskBookingHistory: FunctionComponent = () => {
 
   return (
     <>
+      <ErrorNotifyModal error={error as Error} onClose={CloseErrorNotifyModal} visible={!!error} />
       <Card css={{ mb: 25, color: '$secondary' }}>
         <Card.Body>
           <Row justify='center' align='center'>

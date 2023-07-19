@@ -8,7 +8,7 @@ export class DateHelper {
         return DateHelper.isDateValid(dateToFormat) ? datefn.format(dateToFormat, template) : '';
     }
 
-    public static isDateValid(date: any): boolean {
+    public static isDateValid(date: unknown): boolean {
         return datefn.isValid(date)
     }
 
