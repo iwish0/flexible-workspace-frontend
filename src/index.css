@@ -30,17 +30,63 @@ code {
   align-items: center;
 }
 
-.blockBookingForm {
-  padding: 2rem;
-  background-color: white !important;
-  border: 1px solid #eeeeee;
-  border-radius: 1rem;
+/* Global style for DeskBookingForm and RoomBookingForm component  */
+.blockSearchBookingForm {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 2rem;
 }
 
-.blockBookingForm h2 {
-  font-size: 1.2rem;
+.blockSearchBookingFormTitle {
+  background-color: #24264C;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
 }
+
+.blockSearchBookingFormTitle>h2 {
+  font-size: 1.2rem;
+  color: white;
+  padding: 1rem 0.5rem 0.5rem 1rem;
+}
+
+.searchBookingform {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  border: 1px solid #24264C;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+
+.searchBookingform :last-child {
+  align-self: end;
+}
+
+@media screen and (max-width: 750px) {
+  .searchBookingform {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .searchBookingform .form-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .searchBookingform .datepicker {
+    width: 100%;
+  }
+
+  .searchBookingform :last-child {
+    align-self: stretch;
+  }
+}
+/* end */
 
 
 /* date picker overwrite based style */
@@ -62,3 +108,5 @@ code {
   background-color: #F0F0F0;
   color: black;
 }
+
+/* end  */
