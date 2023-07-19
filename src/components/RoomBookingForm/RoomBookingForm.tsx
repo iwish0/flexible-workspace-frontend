@@ -134,10 +134,11 @@ export const RoomBookingForm: FunctionComponent = () => {
         <Loading className='loader' color={'secondary'} size='xl' />
       ) : (
         <div>
-          <div className='blockBookingForm'>
-            <h2>Rechercher une salle disponible</h2>
-            <Divider />
-            <form className='form' onSubmit={handleSubmit}>
+          <div className='blockSearchBookingForm'>
+            <div className='blockSearchBookingFormTitle'>
+              <h2>Rechercher une salle disponible</h2>
+            </div>
+            <form className='searchBookingform' onSubmit={handleSubmit}>
               <div className='form-group'>
                 <label>Date de début</label>
                 <DatePicker

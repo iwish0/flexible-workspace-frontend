@@ -30,7 +30,7 @@ export const ConfirmModal: FunctionComponent<Props> = ({
             animated={false}
         >
             <Modal.Header>
-                <Text id="modal-title" size={18}>
+                <Text css={{ color: '$secondary' }} id="modal-title" size={18}>
                     {title}
                 </Text>
             </Modal.Header>

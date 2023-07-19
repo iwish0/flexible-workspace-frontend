@@ -67,7 +67,7 @@ export const RoomBookingHistory: FunctionComponent = () => {
           </Row>
         </Card.Body>
       </Card>
-      {loading ? (<Loading className='container' color={'secondary'} size='xl' />) : (
+      {loading ? (<Loading className='container loader' color={'secondary'} size='xl' />) : (
         <div>
           <Grid.Container gap={2}>
             {bookings.map(({ bookingInfo, roomInfo }) => (

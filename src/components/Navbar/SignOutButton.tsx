@@ -8,7 +8,7 @@ export const SignOutButton: FunctionComponent = () => {
     const handleLogout = (): void => { instance.logoutRedirect({ postLogoutRedirectUri: '/' }).catch(e => console.log(e)) };
 
     return (
-        <Button color={'gradient'} auto flat as={Link} css={{ color: 'white', flex: 1 }} onClick={handleLogout}>
+        <Button color='secondary' auto as={Link} css={{ color: 'white', flex: 1 }} onClick={handleLogout}>
             Logout
         </Button>
     );

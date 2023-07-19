@@ -9,6 +9,7 @@ import { useLocation } from 'react-router-dom';
 import './Navbar.css';
 
 type Props = { isAuthenticated: boolean; }
+
 export const Navbar: FunctionComponent<Props> = ({ isAuthenticated }) => {
     const location: Location = useLocation();
     const navigate: NavigateFunction = useNavigate();
@@ -34,9 +35,8 @@ export const Navbar: FunctionComponent<Props> = ({ isAuthenticated }) => {
             <NavBarNextUI.Brand>
                 <Row align='flex-end'>
                     <img src={logo} alt='logo proxiad' className='logo-proxiad' />
-                    <Text b color={'primary'}>Flexible Workspace</Text>
+                    <Text b color={'secondary'}>Flexible Workspace</Text>
                 </Row>
-
             </NavBarNextUI.Brand>
             {isAuthenticated &&
                 <>

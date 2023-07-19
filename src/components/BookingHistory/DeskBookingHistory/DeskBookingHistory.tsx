@@ -66,7 +66,7 @@ export const DeskBookingHistory: FunctionComponent = () => {
           </Row>
         </Card.Body>
       </Card>
-      {loading ? (<Loading className='container' color={'secondary'} size='xl' />) : (
+      {loading ? (<Loading className='container loader' color={'secondary'} size='xl' />) : (
         <div>
           <Grid.Container gap={3} css={{ mb: 40 }}>
             {bookings.map(({ bookingInfo, deskInfo }) => (

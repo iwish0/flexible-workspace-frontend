@@ -10,7 +10,7 @@ import { DeskOfficeLayoutSVGData } from '../../shared/models/rest/office-layout.
 import { BookingFormResult } from '../BookingFormResult/BookingFormResult';
 import { SnackbarVariant } from '../../shared/models/ihm/snackbar.model';
 import { useSnackbar } from '../../shared/context/snackbarProvider';
-import { Button, Divider, Loading } from '@nextui-org/react';
+import { Button, Loading } from '@nextui-org/react';
 import { DD_MM_YYYY } from '../../shared/constants/date.constant';
 import { LOCALE } from '../../shared/constants/locale.constant';
 import { FunctionComponent, useEffect, useState } from 'react';
@@ -129,10 +129,11 @@ export const DeskBookingForm: FunctionComponent = () => {
         <Loading className='loader' color={'secondary'} size='xl' />
       ) : (
         <div>
-          <div className='blockBookingForm'>
-            <h2>Rechercher un bureau de disponible</h2>
-            <Divider />
-            <form className='form' onSubmit={handleSubmit}>
+          <div className='blockSearchBookingForm'>
+            <div className='blockSearchBookingFormTitle'>
+              <h2>Rechercher un bureau de disponible</h2>
+            </div>
+            <form className='searchBookingform' onSubmit={handleSubmit}>
               <div className='form-group'>
                 <label>Date de début</label>
                 <DatePicker

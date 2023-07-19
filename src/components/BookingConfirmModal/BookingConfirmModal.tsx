@@ -39,7 +39,7 @@ export const BookingConfirmModal: FunctionComponent<Props> = (
             animated={false}
         >
             <Modal.Header>
-                <Text id='modal-title' size={18}>
+                <Text css={{ color: '$secondary' }} id='modal-title' size={18}>
                     Confirmation de réservation
                 </Text>
             </Modal.Header>
