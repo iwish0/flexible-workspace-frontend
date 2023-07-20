@@ -1,4 +1,6 @@
+import { ErrorHandlerService } from '../../../shared/services/ihm/error-handler.service';
 import { RoomBookingService } from '../../../shared/services/rest/room-booking.service';
+import { ErrorInformation, ErrorType } from '../../../shared/models/ihm/error.model';
 import { RoomBookingInfo } from '../../../shared/models/rest/room-booking.model';
 import { DELETE_BOOKING_MODAL } from '../../../shared/constants/modal.constant';
 import { BookingHistoryCard } from '../BookingHistoryCard/BookingHistoryCard';
@@ -15,7 +17,7 @@ import './RoomBookingHistory.css';
 
 export const RoomBookingHistory: FunctionComponent = () => {
   const { instance, accounts } = useMsal();
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<ErrorInformation | null>(null);
   const [bookings, setBookings] = useState<RoomBookingInfo[]>([]);
   const [bookingId, setBookingId] = useState<string>('');
   const [deleteBookingConfirmModalVisible, setDeleteBookingConfirmModalVisible] = useState<boolean>(false);
@@ -29,7 +31,7 @@ export const RoomBookingHistory: FunctionComponent = () => {
       const bookings: RoomBookingInfo[] = await RoomBookingService.getRoomBookingHistoryByUserId(accounts[0].localAccountId, token);
       setBookings(bookings);
     } catch (error: unknown) {
-      setError(error as Error);
+      setError(ErrorHandlerService.getErrorInformation(error as ErrorType));
     }
   }
 
@@ -56,7 +58,7 @@ export const RoomBookingHistory: FunctionComponent = () => {
         await getBookingHistory();
       }
     } catch (error: unknown) {
-      setError(error as Error)
+      setError(ErrorHandlerService.getErrorInformation(error as ErrorType));
     } finally {
       setLoading(false);
     }
@@ -64,7 +66,7 @@ export const RoomBookingHistory: FunctionComponent = () => {
 
   return (
     <>
-      <ErrorNotifyModal error={error as Error} onClose={CloseErrorNotifyModal} visible={!!error} />
+      <ErrorNotifyModal error={error} onClose={CloseErrorNotifyModal} visible={!!error} />
       <Card css={{ mb: 25, color: '$secondary' }}>
         <Card.Body>
           <Row justify='center' align='center'>

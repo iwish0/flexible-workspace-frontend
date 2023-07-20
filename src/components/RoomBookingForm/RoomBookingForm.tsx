@@ -3,6 +3,8 @@ import { RoomBookingService, SearchRoomCriteria } from '../../shared/services/re
 import { SearchResultDetailService } from '../../shared/services/ihm/search-result-detail.service';
 import { RoomBooking, RoomBookingState } from '../../shared/models/rest/room-booking.model';
 import { RoomOfficeLayoutSVGData } from '../../shared/models/rest/office-layout.model';
+import { ErrorHandlerService } from '../../shared/services/ihm/error-handler.service';
+import { ErrorInformation, ErrorType } from '../../shared/models/ihm/error.model';
 import { BookingFormResult } from '../BookingFormResult/BookingFormResult';
 import { ErrorNotifyModal } from '../UI/ErrorNotifyModal/ErrorNotifyModal';
 import { DD_MM_YYYY } from '../../shared/constants/date.constant';
@@ -44,7 +46,7 @@ export const RoomBookingForm: FunctionComponent = () => {
     });
   const [selectedRoom, setSelectedRoom] = useState<RoomBookingState | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<ErrorInformation | null>(null);
 
   useEffect(() => {
     if (selectedRoom) {
@@ -87,7 +89,7 @@ export const RoomBookingForm: FunctionComponent = () => {
         await RoomBookingService.create(roomBooking, token);
         getOfficeLayoutWithDeskBookingsState();
       } catch (error: unknown) {
-        setError(error as Error);
+        setError(ErrorHandlerService.getErrorInformation(error as ErrorType));
       } finally {
         setLoading(false);
       }
@@ -122,7 +124,7 @@ export const RoomBookingForm: FunctionComponent = () => {
       const result: RoomOfficeLayoutSVGData[] = await RoomBookingService.getOfficeLayoutWithRoomBookingsState(criteria, token);
       setListOfficeLayoutSVGData(result);
     } catch (error: unknown) {
-      setError(error as Error)
+      setError(ErrorHandlerService.getErrorInformation(error as ErrorType));
     }
     finally {
       setLoading(false);
@@ -135,7 +137,7 @@ export const RoomBookingForm: FunctionComponent = () => {
 
   return (
     <div>
-      <ErrorNotifyModal error={error as Error} onClose={onCloseErrorNotifyModal} visible={!!error} />
+      <ErrorNotifyModal error={error} onClose={onCloseErrorNotifyModal} visible={!!error} />
       {loading ? (
         <Loading className='loader' color={'secondary'} size='xl' />
       ) : (

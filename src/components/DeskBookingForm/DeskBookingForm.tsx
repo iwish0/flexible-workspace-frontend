@@ -6,6 +6,8 @@ import { BookingConfirmModal, BookingConfirmationModalData } from '../BookingCon
 import { SearchResultDetailService } from '../../shared/services/ihm/search-result-detail.service';
 import { DeskBooking, DeskBookingState } from '../../shared/models/rest/desk-booking.model';
 import { DeskOfficeLayoutSVGData } from '../../shared/models/rest/office-layout.model';
+import { ErrorHandlerService } from '../../shared/services/ihm/error-handler.service';
+import { ErrorInformation, ErrorType } from '../../shared/models/ihm/error.model';
 import { BookingFormResult } from '../BookingFormResult/BookingFormResult';
 import { ErrorNotifyModal } from '../UI/ErrorNotifyModal/ErrorNotifyModal';
 import { SnackbarVariant } from '../../shared/models/ihm/snackbar.model';
@@ -35,7 +37,7 @@ export const DeskBookingForm: FunctionComponent = () => {
     checkInDateTime: { value: new Date(), isValid: true },
     checkOutDateTime: { value: new Date(), isValid: true }
   });
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<ErrorInformation | null>(null);
 
   const [listOfficeLayoutSVGData, setListOfficeLayoutSVGData] = useState<DeskOfficeLayoutSVGData[]>([]);
   const [isBookingConfirmModalVisible, setIsBookingConfirmModalVisible] = useState<boolean>(false);
@@ -89,7 +91,7 @@ export const DeskBookingForm: FunctionComponent = () => {
         await DeskBookingService.create(deskBooking, token);
         getOfficeLayoutWithDeskBookingsState();
       } catch (error: unknown) {
-        setError(error as Error);
+        setError(ErrorHandlerService.getErrorInformation(error as ErrorType));
       } finally {
         setLoading(false);
       }
@@ -125,7 +127,7 @@ export const DeskBookingForm: FunctionComponent = () => {
       const result: DeskOfficeLayoutSVGData[] = await DeskBookingService.getOfficeLayoutWithDeskBookingsState(criteria, token);
       setListOfficeLayoutSVGData(result);
     } catch (error: unknown) {
-      setError(error as Error);
+      setError(ErrorHandlerService.getErrorInformation(error as ErrorType));
     } finally {
       setLoading(false);
     }
@@ -133,7 +135,7 @@ export const DeskBookingForm: FunctionComponent = () => {
 
   return (
     <div>
-      <ErrorNotifyModal error={error as Error} onClose={onCloseErrorNotifyModal} visible={!!error} />
+      <ErrorNotifyModal error={error} onClose={onCloseErrorNotifyModal} visible={!!error} />
       {loading ? (
         <Loading className='loader' color={'secondary'} size='xl' />
       ) : (
