@@ -16,6 +16,8 @@ export class DateHelper {
         if (!DateHelper.isDateValid(date)) {
             return '';
         }
-        return `${date.getHours()}:${date.getMinutes()}`;
+        const hours: string = date.getHours().toString().padStart(2, '0');
+        const minuts: string = date.getMinutes().toString().padStart(2, '0');
+        return `${hours}:${minuts}`;
     }
 }
