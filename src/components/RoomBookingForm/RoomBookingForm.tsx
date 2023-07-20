@@ -7,7 +7,7 @@ import { ErrorHandlerService } from '../../shared/services/ihm/error-handler.ser
 import { ErrorInformation, ErrorType } from '../../shared/models/ihm/error.model';
 import { BookingFormResult } from '../BookingFormResult/BookingFormResult';
 import { ErrorNotifyModal } from '../UI/ErrorNotifyModal/ErrorNotifyModal';
-import { DD_MM_YYYY } from '../../shared/constants/date.constant';
+import { DD_MM_YYYY_HH_MM } from '../../shared/constants/date.constant';
 import { LOCALE } from '../../shared/constants/locale.constant';
 import { FunctionComponent, useEffect, useState } from 'react';
 import { HEURE } from '../../shared/constants/label.constant';
@@ -154,7 +154,7 @@ export const RoomBookingForm: FunctionComponent = () => {
                   selected={form.checkInDateTime.value}
                   onChange={onChangeCheckInDate}
                   locale={LOCALE}
-                  dateFormat={DD_MM_YYYY}
+                  dateFormat={DD_MM_YYYY_HH_MM}
                   timeCaption={HEURE}
                   showTimeSelect
                   timeIntervals={15}
@@ -167,7 +167,7 @@ export const RoomBookingForm: FunctionComponent = () => {
                   selected={form.checkOutDateTime.value}
                   onChange={onChangeCheckOutDate}
                   locale={LOCALE}
-                  dateFormat={DD_MM_YYYY}
+                  dateFormat={DD_MM_YYYY_HH_MM}
                   timeCaption={HEURE}
                   showTimeSelect
                   timeIntervals={15}
